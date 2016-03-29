@@ -1,12 +1,39 @@
-######## git shortcuts ########
+######## google go
 
-alias gss='git status'
+setenv GOPATH ~/Code/go
+
+######## ruby
+
+set PATH $HOME/.rbenv/bin $PATH
+. (rbenv init -|psub)
+
+alias bx 'bundle exec'
+alias r 'bundle exec rake'
+
+######## docker
+
+alias dc 'docker-compose'
+alias dcb 'docker-compose build'
+alias dcr 'docker-compose run'
+alias dgc 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc'
+alias di 'docker images'
+alias dl 'docker logs'
+alias dm 'docker-machine'
+alias dps 'docker ps'
+alias drm 'docker rm -f'
+alias drmi 'docker rmi'
+
+######## git
+
+alias gb='git branch'
 alias gco='git checkout'
 alias gd='git diff'
 alias gdc='git diff --cached'
+alias gss='git status'
+alias gsw='git show'
+alias pull='git pull --ff-only'
 
-######## git prompt lifted from http://goo.gl/Wq5lb7 ########
-
+# git prompt lifted from http://goo.gl/Wq5lb7
 set normal (set_color normal)
 set magenta (set_color magenta)
 set yellow (set_color yellow)
@@ -25,11 +52,11 @@ set __fish_git_prompt_color_upstream_behind red
 
 # Status Chars
 set __fish_git_prompt_char_dirtystate '⚡ '
-set __fish_git_prompt_char_stagedstate '→'
-set __fish_git_prompt_char_untrackedfiles '☡'
+set __fish_git_prompt_char_stagedstate '📌 '
+set __fish_git_prompt_char_untrackedfiles '💩 '
 set __fish_git_prompt_char_stashstate '↩'
-set __fish_git_prompt_char_upstream_ahead '+'
-set __fish_git_prompt_char_upstream_behind '-'
+set __fish_git_prompt_char_upstream_ahead '⋙'
+set __fish_git_prompt_char_upstream_behind '⋘'
 
 
 function fish_prompt
