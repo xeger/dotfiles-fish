@@ -1,4 +1,4 @@
-# Force-push the working branch to its remote tracking branch at origin. If
+# Push the working branch to its remote tracking branch at origin. If
 # there is no remote tracking branch, then push to an upstream branch of the
 # same name and set upstream for future pushes.
 function push
