@@ -1,17 +1,22 @@
 function g
   set -l bases $HOME/Code/rightscale $HOME/Code/xeger $HOME/Code/go/src/github.com/rightscale
-  set -l regexp (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_]*_/g' | sed -e 's/_$//')
+
+  set -l suffix "_$argv[1]\$"
+  set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_]*_/g' | sed -e 's/_$//')
 
   for base in $bases
-    set -l candidates (ls -d $base/*)
-    for candidate in $candidates
-      set -l bn (basename $candidate)
-      if test $bn = $argv[1]
-        cd $candidate
+    set -l dirs (ls -d $base/*)
+    for dir in $dirs
+      set -l bn (basename $dir)
+      if test $bn = $argv[1] # exact match
+        cd $dir
         return 0
-      else if echo $bn | grep -qE $regexp
-        cd $candidate
+      else if echo $bn | grep -qE $initials # initials match
+        cd $dir
         return 0
+      else if echo $bn | grep -qE $suffix # suffix word match
+      cd $dir
+      return 0
       end
     end
   end
