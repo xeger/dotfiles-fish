@@ -14,7 +14,7 @@
 function sniff
   set -l org (basename (dirname $PWD))
   set -l repository (basename $PWD)
-  test -n $argv[1]; and set -l tag $argv[1]; or set -l tag latest
+  test -n "$argv[1]"; and set -l tag $argv[1]; or set -l tag latest
 
   set -l image "$org/$repository:$tag"
   set -l image_ref (docker inspect --format '{{.ID}}' $image)
