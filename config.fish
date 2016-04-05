@@ -1,3 +1,7 @@
+######## basic Unix stuff: editor, terminal, etc
+
+setenv EDITOR vi
+
 ######## google go
 
 setenv GOPATH ~/Code/go
@@ -33,6 +37,10 @@ alias gl='git log --topo-order --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Cre
 alias gss='git status'
 alias gsw='git show'
 alias pull='git pull --ff-only'
+alias sclear='git stash clear'
+alias slist='git stash list'
+alias spush='git stash save'
+alias spop='git stash pop'
 
 # git prompt lifted from http://goo.gl/Wq5lb7
 set normal (set_color normal)
