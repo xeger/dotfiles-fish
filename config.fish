@@ -2,9 +2,24 @@
 
 setenv EDITOR vi
 
+######## ssh
+
+if test -n "$SSH_AUTH_SOCK"
+  set -l private_keys (grep -El 'BEGIN [A-Z]* ?PRIVATE KEY' ~/.ssh/*)
+  if test $status = 0; and test -n "$private_keys"
+    ssh-add $private_keys 2> /dev/null
+    if test $status != 0
+      echo "Could not add private SSH keys to agent"
+      echo "Please run this command by hand:"
+      echo "ssh-add $private_keys"
+    end
+  end
+end
+
 ######## google go
 
 setenv GOPATH ~/Code/go
+setenv PATH $PATH ~/Code/go/bin
 
 ######## ruby
 
@@ -31,6 +46,7 @@ alias drmi 'docker rmi'
 
 alias gb='git branch'
 alias gco='git checkout'
+alias gcp='git cherry-pick'
 alias gd='git diff'
 alias gdc='git diff --cached'
 alias gl='git log --topo-order --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
