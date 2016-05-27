@@ -36,7 +36,7 @@ function sniff
   echo
 
   echo "The following local branches are 'at' $image:"
-  grep -l ca293f24928fdf38b3aeec4e5234f72fb264318a .git/refs/heads/* | sed -e 's:.git/refs/heads/:  :'
+  grep -l $git_ref .git/refs/heads/* | sed -e 's:.git/refs/heads/:  :'
   echo
 
   echo "The following local branches are 'ahead' of $image":
