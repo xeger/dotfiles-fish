@@ -20,6 +20,8 @@ end
 
 setenv GOPATH ~/Code/go
 setenv PATH $PATH ~/Code/go/bin
+launchctl setenv PATH $PATH
+launchctl setenv GOPATH $GOPATH
 
 ######## ruby
 
@@ -49,7 +51,7 @@ alias gco='git checkout'
 alias gcp='git cherry-pick'
 alias gd='git diff'
 alias gdc='git diff --cached'
-alias gl='git log --topo-order --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset" --abbrev-commit'
+alias gl='git log --topo-order --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%G?:%an>%Creset" --abbrev-commit'
 alias gss='git status'
 alias gsw='git show'
 alias sclear='git stash clear'
