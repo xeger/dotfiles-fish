@@ -1,5 +1,5 @@
 function g
-  set -l bases $HOME/Code/rightscale $HOME/Code/xeger $HOME/Code/go/src/github.com/rightscale
+  set -l bases $HOME/Code/rightscale $HOME/Code/xeger $HOME/Code/go/src/github.com/rightscale $HOME/Code/go/src/github.com/xeger
 
   set -l suffix "_$argv[1]\$"
   set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_]*_/g' | sed -e 's/_$//')
