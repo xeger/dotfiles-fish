@@ -1,4 +1,9 @@
 function g
+  if test -d $argv[1]
+    cd $argv[1]
+    return 0
+  end
+
   set -l bases $HOME/Code/rightscale $HOME/Code/xeger $HOME/Code/go/src/github.com/rightscale $HOME/Code/go/src/github.com/xeger
 
   set -l suffix "_$argv[1]\$"
