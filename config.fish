@@ -18,8 +18,8 @@ end
 
 ######## google go
 
-setenv GOPATH ~/Code/go
-setenv PATH $PATH ~/Code/go/bin
+setenv GOPATH ~/go
+setenv PATH $PATH ~/go/bin
 launchctl setenv PATH $PATH
 launchctl setenv GOPATH $GOPATH
 

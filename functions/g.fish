@@ -1,14 +1,10 @@
 function g
-  if test -d $argv[1]
-    cd $argv[1]
-    return 0
-  end
-
-  set -l bases $HOME/Code/rightscale $HOME/Code/xeger $HOME/Code/go/src/github.com/rightscale $HOME/Code/go/src/github.com/xeger
+  set -l bases $HOME/Code/github.com/rightscale $HOME/Code/github.com/xeger
 
   set -l suffix "_$argv[1]\$"
   set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_]*_/g' | sed -e 's/_$//')
 
+  # Check whether this is a shortcut for some source-code project.
   for base in $bases
     set -l dirs (ls -d $base/*)
     for dir in $dirs
@@ -26,6 +22,13 @@ function g
     end
   end
 
+  # Check whether this is the literal name of some directory
+  if test -d $argv[1]
+    cd $argv[1]
+    return 0
+  end
+
+  # No matches! Display error message.
   echo "Could not find a directory matching '$argv[1]' under any of:"
   for base in $bases
     echo "  $base"
