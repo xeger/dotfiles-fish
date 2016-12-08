@@ -17,7 +17,9 @@ function trav
   for subdir in $repos
     cd $subdir
     printf '%20.20s - ' $subdir
-    travis history -i -l 1 -b $branch
+    set output (travis history -i -l 1 -b $branch)
+    echo $output
+    travis open (echo $output | cut -d'#' -f2 | cut -d' ' -f1)
     cd ..
   end
 
