@@ -19,7 +19,9 @@ function trav
     printf '%20.20s - ' $subdir
     set output (travis history -i -l 1 -b $branch)
     echo $output
-    travis open (echo $output | cut -d'#' -f2 | cut -d' ' -f1)
+    if echo $output | grep -qv 'passed'
+      travis open (echo $output | cut -d'#' -f2 | cut -d' ' -f1)
+    end
     cd ..
   end
 

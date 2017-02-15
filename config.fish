@@ -93,7 +93,13 @@ function fish_prompt
   printf '%s' (prompt_pwd)
   set_color normal
 
-  printf '%s ' (__fish_git_prompt)
+  set danger ''
+  set here (basename $PWD)
+  if git add -n ../$here 2>&1 | grep -q 'are ignored'
+    set danger ' ⚠️ ️'
+  end
+
+  printf '%s%s ' $danger (__fish_git_prompt)
 
   set_color normal
 end
