@@ -38,11 +38,13 @@ alias dcb 'docker-compose build'
 alias dcr 'docker-compose run'
 alias dgc 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc'
 alias di 'docker images'
-alias dl 'docker logs'
-alias dm 'docker-machine'
+alias dn 'docker network'
 alias dps 'docker ps'
 alias drm 'docker rm -f'
 alias drmi 'docker rmi'
+alias dst 'docker stack'
+alias dsv 'docker service'
+alias dsvi 'docker service inspect'
 
 ######## git
 
