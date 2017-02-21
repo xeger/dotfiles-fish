@@ -5,6 +5,8 @@ function dsh
 
   if test (count $candidates) -eq 1
     docker exec -t -i $candidates[1] /bin/sh -c '[ -f /bin/bash ] && exec /bin/bash -l || exec /bin/sh -l'
+  else if test  (count $candidates) -eq 0
+    docker exec -t -i $search /bin/sh -c '[ -f /bin/bash ] && exec /bin/bash -l || exec /bin/sh -l'
   else
     echo "Too many containers match '$search'; please be more specific to disambiguate between:"
     for cand in $candidates

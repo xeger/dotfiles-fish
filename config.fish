@@ -33,18 +33,20 @@ alias r 'bundle exec rake'
 
 ######## docker
 
-alias dc 'docker-compose'
-alias dcb 'docker-compose build'
-alias dcr 'docker-compose run'
-alias dgc 'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc'
-alias di 'docker images'
-alias dn 'docker network'
-alias dps 'docker ps'
-alias drm 'docker rm -f'
+alias dc   'docker-compose'
+alias dcb  'docker-compose build'
+alias dcr  'docker-compose run'
+alias dgc  'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc'
+alias di   'docker inspect'
+alias dim  'docker images'
+alias dn   'docker network'
+alias dps  'docker ps --format '\''table {{.ID | printf "%12.12s"}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}'\'''
+alias drm  'docker rm -f'
 alias drmi 'docker rmi'
-alias dst 'docker stack'
-alias dsv 'docker service'
-alias dsvi 'docker service inspect'
+alias dv   'docker volume'
+alias dst  'docker stack'
+alias ds   'docker service'
+alias dsi  'docker service inspect --pretty'
 
 ######## git
 
