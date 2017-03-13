@@ -1,6 +1,17 @@
+# Symlink a GOPATH package under vendor/ so its transitive imports will
+# resolve properly.
+#
+# This is the only way to simultaneously work on a Golang service and its
+# dependencies without completely disabling vendoring...
+
 function vendor
-  if test -d vendor/$argv[1]
-    echo "Already vendored:"
+  if test -L vendor/$argv[1]
+    echo "Already symlinked:"
+    ls -lad vendor/$1
+    echo Nothing to do
+    return 1
+  else if test -d vendor/$argv[1]
+    echo "Already vendored; please 'unvendor' first:"
     ls -lad vendor/$1
     echo Nothing to do
     return 1

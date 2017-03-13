@@ -47,6 +47,7 @@ alias dv   'docker volume'
 alias dst  'docker stack'
 alias ds   'docker service'
 alias dsi  'docker service inspect --pretty'
+alias dtty 'screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty 9600'
 
 ######## git
 

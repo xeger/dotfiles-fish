@@ -1,5 +1,7 @@
+# Stop using the vendored copy of a package.
+
 function unvendor
-  if test -s vendor/$argv[1]
+  if test -L vendor/$argv[1]
     echo "Remove symlink:"
     echo -n '  '; ls -Pld vendor/$argv[1]
     rm vendor/$argv[1]
