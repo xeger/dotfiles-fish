@@ -18,15 +18,19 @@ end
 
 ######## google go
 
-setenv GOPATH ~/go
-setenv PATH $PATH ~/go/bin
-launchctl setenv PATH $PATH
-launchctl setenv GOPATH $GOPATH
+if test -d ~/go/bin
+  setenv GOPATH ~/go
+  setenv PATH $PATH ~/go/bin
+  launchctl setenv PATH $PATH
+  launchctl setenv GOPATH $GOPATH
+end
 
 ######## ruby
 
-set PATH $HOME/.rbenv/bin $PATH
-. (rbenv init -|psub)
+if test -d ~/.rbenv
+  set PATH ~/.rbenv/bin $PATH
+  source (rbenv init -|psub)
+end
 
 alias bx 'bundle exec'
 alias r 'bundle exec rake'
