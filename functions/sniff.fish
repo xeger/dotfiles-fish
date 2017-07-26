@@ -20,12 +20,21 @@ function sniff
   set -l repository (basename $PWD)
   test -n "$argv[1]"; and set -l tag $argv[1]; or set -l tag latest
 
+  # allow image name suffix
+  if test (count $argv) -gt 1
+    set repository "$repository"_"$argv[2]"
+  end
+
   # TODO: get rid of hack sooner or later
   if test $tag =  master
     set tag latest
   end
 
   set -l image "$org/$repository:$tag"
+
+  git fetch
+  docker pull "$org/$repository:$tag"
+
   set -l image_ref (docker inspect --format '{{.ID}}' $image)
   or return 1
   set -l git_ref (docker inspect --format '{{index .ContainerConfig.Labels "git.ref"}}' $image)
@@ -35,11 +44,16 @@ function sniff
   echo "$image was built from commit $git_ref"
   echo
 
-  echo "The following local branches are 'at' $image:"
-  grep -l $git_ref .git/refs/heads/* | sed -e 's:.git/refs/heads/:  :'
+  #echo "The following local branches are 'at' $image:"
+  #grep -l $git_ref .git/refs/heads/* | sed -e 's:.git/refs/heads/:  :'
+  #echo
+
+  echo "The following local branches are at/ahead of $image":
+  git branch -l --contains $git_ref
   echo
 
-  echo "The following local branches are 'ahead' of $image":
-  git branch --contains $git_ref
+
+  echo "The following remote branches are at/ahead of $image":
+  git branch -r --contains $git_ref
   echo
 end
