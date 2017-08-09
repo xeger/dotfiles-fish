@@ -53,6 +53,10 @@ alias ds   'docker service'
 alias dsi  'docker service inspect --pretty'
 alias dtty 'screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty 9600'
 
+######## google cloud SDK
+
+if [ -f '/Users/tony/google-cloud-sdk/path.fish.inc' ]; if type source > /dev/null; source '/Users/tony/google-cloud-sdk/path.fish.inc'; else; . '/Users/tony/google-cloud-sdk/path.fish.inc'; end; end
+
 ######## git
 
 alias gb='git branch'
@@ -113,5 +117,8 @@ function fish_prompt
   set_color normal
 end
 
-# The next line updates PATH for the Google Cloud SDK.
-if [ -f '/Users/tony/google-cloud-sdk/path.fish.inc' ]; if type source > /dev/null; source '/Users/tony/google-cloud-sdk/path.fish.inc'; else; . '/Users/tony/google-cloud-sdk/path.fish.inc'; end; end
+######## local config that should not be committed to git
+
+if [ -f ~/.config/fish/local.fish ]
+  source ~/.config/fish/local.fish
+end
