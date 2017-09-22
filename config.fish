@@ -2,6 +2,9 @@
 
 setenv EDITOR vi
 
+alias psx 'pstree -U -g 2 %self'
+alias lsx 'tree -A -C -L 2'
+
 ######## ssh
 
 if test -n "$SSH_AUTH_SOCK"
