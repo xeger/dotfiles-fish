@@ -35,6 +35,10 @@ if test -d ~/.rbenv
   source (rbenv init -|psub)
 end
 
+if test -d /usr/local/opt/openssl
+  set -x RUBY_CFLAGS -I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib
+end
+
 alias bx 'bundle exec'
 alias r 'bundle exec rake'
 
