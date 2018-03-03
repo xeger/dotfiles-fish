@@ -3,16 +3,10 @@
 #   g xyz    --> chdir to some rightscale- or xeger-owned dir named x*_y*_z*
 #   g _site  --> chdir to some rightscale- or xeger-owned dir named *_site
 function g
-  set -l bases $HOME/Code/github.com/rightscale $HOME/Code/github.com/xeger
+  set -l bases $HOME/Code/appfolio $HOME/Code/xeger
 
   set -l suffix "_$argv[1]\$"
   set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_]*_/g' | sed -e 's/_$//')
-
-  # Check whether this is the literal name of some directory
-  if test -d $argv[1]
-    cd $argv[1]
-    return 0
-  end
 
   # Check whether this is a shortcut for some source-code project.
   for base in $bases
@@ -30,6 +24,12 @@ function g
         return 0
       end
     end
+  end
+
+  # Check whether this is the literal name of some directory
+  if test -d $argv[1]
+    cd $argv[1]
+    return 0
   end
 
   # No matches! Display error message.
