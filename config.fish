@@ -31,7 +31,7 @@ end
 ######## ruby
 
 if test -d ~/.rbenv
-  set PATH ~/.rbenv/bin $PATH
+  set PATH ~/.rbenv/shims $PATH
   source (rbenv init -|psub)
 end
 
@@ -62,7 +62,13 @@ alias dtty 'screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver
 
 ######## google cloud SDK
 
-if [ -f '/Users/tony/google-cloud-sdk/path.fish.inc' ]; if type source > /dev/null; source '/Users/tony/google-cloud-sdk/path.fish.inc'; else; . '/Users/tony/google-cloud-sdk/path.fish.inc'; end; end
+if [ -f '/Users/tony/google-cloud-sdk/path.fish.inc' ]
+  if type source > /dev/null
+    source '/Users/tony/google-cloud-sdk/path.fish.inc'
+  else
+    . '/Users/tony/google-cloud-sdk/path.fish.inc'
+  end
+end
 
 ######## git
 

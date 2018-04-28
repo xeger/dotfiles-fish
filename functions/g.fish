@@ -3,7 +3,7 @@
 #   g xyz    --> chdir to some rightscale- or xeger-owned dir named x*_y*_z*
 #   g _site  --> chdir to some rightscale- or xeger-owned dir named *_site
 function g
-  set -l bases $HOME/Code/appfolio $HOME/Code/xeger
+  set -l bases $HOME/Monolith $HOME/Code/appfolio $HOME/Code/xeger
 
   set -l suffix "_$argv[1]\$"
   set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_]*_/g' | sed -e 's/_$//')
