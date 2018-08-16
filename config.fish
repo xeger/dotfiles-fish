@@ -22,10 +22,9 @@ end
 ######## google go
 
 if test -d ~/go/bin
-  setenv GOPATH ~/go
-  setenv PATH $PATH ~/go/bin
-  launchctl setenv PATH $PATH
-  launchctl setenv GOPATH $GOPATH
+  set -x GOPATH ~/go
+  set -x PATH $PATH ~/go/bin
+  launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
 end
 
 ######## ruby
@@ -41,6 +40,7 @@ end
 
 alias bx 'bundle exec'
 alias r 'bundle exec rake'
+alias rr "rerun -b -c -p '**/*.{rb}' -- "
 
 ######## docker
 

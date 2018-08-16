@@ -1,3 +1,4 @@
+# Switch rbenv to use a specific ruby version
 function use
   if test "$argv[1]" = ""
     rbenv versions
