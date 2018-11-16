@@ -9,5 +9,5 @@ function pull
   set -l working_branch (git symbolic-ref HEAD 2>/dev/null | sed -e 's:refs/heads/::')
   test -n "$argv[1]"; and set -l branch $argv[1]; or set -l branch $working_branch
 
-  git pull --ff-only origin $branch
+  git pull -p --ff-only origin $branch
 end
