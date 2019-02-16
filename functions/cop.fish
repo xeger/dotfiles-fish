@@ -10,6 +10,7 @@ function cop
     echo "No cached changes; scan entire IM engine"
     set paths "apps/property/engines/im"
   end
+  echo "+ bundle exec rubocop $config -a $paths"
   bundle exec rubocop $config -a $paths
   popd
 end

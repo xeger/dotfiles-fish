@@ -1,13 +1,15 @@
 # CURRENTLY: watch dir for changes and then invoke a command (in a loop)
 function watch
   while true
-    echo "Invoke '$argv[2..-1]'' when changes occur in '$argv[1]'"
-    fswatch -1 $argv[1]
-    $argv[2..-1]
+    eval $argv[2..-1]
+    set -l output (fswatch -t -1 $argv[1])
+    if test -z "$output"
+      break # user hit Ctrl+C
+    else
+      clear # filesystem changed
+    end
   end
 end
-
-
 
 # FORMERLY: watch a container's logs across restarts
 # function watch
