@@ -5,10 +5,15 @@ function cop
     echo "Use IM configuration"
     set config "--config=apps/property/engines/im/.rubocop.yml"
   end
-  set paths (git diff --cached --name-status | grep '^[AM]' | cut -f 2)
-  if test -z "$paths"
-    echo "No cached changes; scan entire IM engine"
-    set paths "apps/property/engines/im"
+  
+  if test -n "$argv"
+    set paths $argv
+  else
+    set paths (git diff --cached --name-status | grep '^[AM]' | cut -f 2)
+    if test -z "$paths"
+      echo "No staged changes; please specify file(s) to fix."
+      return 1
+    end
   end
   echo "+ bundle exec rubocop $config -a $paths"
   bundle exec rubocop $config -a $paths
