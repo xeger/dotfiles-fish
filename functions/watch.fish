@@ -2,7 +2,7 @@
 function watch
   while true
     eval $argv[2..-1]
-    set -l output (fswatch -t -1 $argv[1])
+    set -l output (fswatch -L -t -1 $argv[1])
     if test -z "$output"
       break # user hit Ctrl+C
     else
