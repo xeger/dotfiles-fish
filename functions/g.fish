@@ -1,12 +1,10 @@
 # Supported syntax (& search priority):
 #   g foobar --> chdir to foobar relative to pwd, if exists
-#   g xyz    --> chdir to some rightscale- or xeger-owned dir named x*_y*_z*
-#   g _site  --> chdir to some rightscale- or xeger-owned dir named *_site
+#   g xyz    --> chdir to some project names x*_y*_z* or x*-z*-y*
 function g
-  set -l bases $HOME/Monolith $HOME/Code/appfolio $HOME/Code/xeger
+  set -l bases $HOME/Code/appfolio $HOME/Monolith $HOME/Code/xeger 
 
-  set -l suffix "_$argv[1]\$"
-  set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_]*_/g' | sed -e 's/_$//')
+  set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_-]*[_-]/g' | sed -e 's/\[_-\]$//')
 
   # Check whether this is a shortcut for some source-code project.
   for base in $bases
@@ -17,9 +15,6 @@ function g
         cd $dir
         return 0
       else if echo $bn | grep -qE $initials # initials match
-        cd $dir
-        return 0
-      else if echo $bn | grep -qE $suffix # suffix word match
         cd $dir
         return 0
       end
