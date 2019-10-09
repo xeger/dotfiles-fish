@@ -1,7 +1,5 @@
 # AWS assume-role with fish sauce and an IM garnish.
 function aar
-  # NEW SCRIPT - not working yet (AWS CLI doesn't seem to like it)
-
   set -l role_arn (grep -A3 "\[profile $argv[1]\]" ~/.aws/config | grep role_arn | awk 'BEGIN { FS = " = " } ; { print $2 }')
   if test -z $role_arn
     echo "No profile '$argv[1]' in ~/.aws/config"
@@ -20,35 +18,24 @@ function aar
       set -gx AWS_ACCESS_KEY (jq -r .Credentials.AccessKeyId  $json_file)
       set -gx AWS_SECRET_ACCESS_KEY (jq -r .Credentials.SecretAccessKey  $json_file)
       set -gx AWS_SESSION_TOKEN (jq -r .Credentials.SessionToken  $json_file)
+
+      set -gx IM_AWS_ACCESS_KEY $AWS_ACCESS_KEY
+      set -gx IM_AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY
+      set -gx IM_AWS_SESSION_TOKEN $AWS_SESSION_TOKEN
+
       echo "aar: Using cached credentials for $AWS_PROFILE ($role_arn)"
       return 0
     end
   end
 
-  echo "aar: Initializing CLI session for $AWS_PROFILE"
-  aws iam get-account-summary --query 'SummaryMap.{Users,UsersQuota}'
-  if test "$status" -ne 0
-    echo "aar: Failed to obtain credentials ($success); please try again"
+  echo "aar: Initializing CLI session for $AWS_PROFILE ($role_arn)"
+  aws iam get-account-summary --query 'SummaryMap.Users'
+  set -l $iamstatus $status
+  if test "$iamstatus" -ne 0
+    echo "aar: Failed to obtain credentials ($iamstatus); please try again"
     return 2
   else
     aar $argv[1]
     return 0
   end
-  # ORIGINAL SCRIPT - useful enough, but maybe the new one is better...
-  
-  # rm -f ~/.aws/aws-credentials-$argv[1].fish
-  # assume-role -duration 12h0m0s $argv[1] $HOME/.config/fish/scripts/dump-aws-credentials.fish $argv[1] > ~/.aws/credentials-$argv[1].fish
-  # if test -f ~/.aws/credentials-$argv[1].fish
-  #   source ~/.aws/credentials-$argv[1].fish
-
-  #   set -gx IM_AWS_ACCESS_KEY $AWS_ACCESS_KEY
-  #   set -gx IM_AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY
-  #   set -gx IM_AWS_SESSION_TOKEN $AWS_SESSION_TOKEN
-        
-  #   echo "Switched AWS account to $AWS_PROFILE"
-  #   return 0
-  # else
-  #   echo "FATAL: assume-role failed to produce ~/.aws/credentials-$argv[1].fish"
-  #   return 1
-  # end
 end
