@@ -30,7 +30,7 @@ function aar
 
   echo "aar: Initializing CLI session for $AWS_PROFILE ($role_arn)"
   aws iam get-account-summary --query 'SummaryMap.Users'
-  set -l $iamstatus $status
+  set -l iamstatus $status
   if test "$iamstatus" -ne 0
     echo "aar: Failed to obtain credentials ($iamstatus); please try again"
     return 2
