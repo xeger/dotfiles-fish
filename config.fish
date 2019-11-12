@@ -43,6 +43,7 @@ end
 alias bx 'bundle exec'
 alias r 'bundle exec rake'
 alias rr "rerun -b -c -p '**/*.{rb}' -- "
+alias rspec "bundle exec rspec --fail-fast"
 
 ######## docker
 
