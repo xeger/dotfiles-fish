@@ -23,6 +23,14 @@ function aar
       set -gx IM_AWS_ACCESS_KEY $AWS_ACCESS_KEY
       set -gx IM_AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY
       set -gx IM_AWS_SESSION_TOKEN $AWS_SESSION_TOKEN
+
+      # AWS creds are obtained; now let's grab all of the app secrets from
+      # the AWS parameter store for our product.
+      set -l secrets (chamber export --format=dotenv investment-management)
+      for line in $secrets
+        set -xg (echo $line | cut -d = -f 1) (echo $line | cut -d = -f 2-)
+      end
+
       return 0
     end
   else
