@@ -35,10 +35,19 @@ function aar
     set -l json_file
   end
 
+  set -ge AWS_PROFILE
+  set -ge AWS_ACCESS_KEY
+  set -ge AWS_SECRET_ACCESS_KEY
+  set -ge AWS_SESSION_TOKEN
+
   echo "aar: Initializing CLI session for $profile_name ($role_arn)"
   set -l mfa_stuff ""
   if test -n "$mfa_serial"
-    read -p "echo 'MFA code: '" mfa_code
+    set -l mfa_code (ykman oath code --single AWS:appfolio-login)
+    if test -z "$mfa_code"
+      return 2
+    end
+    # read -p "echo 'MFA code: '" mfa_code
     set mfa_stuff --serial-number=$mfa_serial --token-code=$mfa_code
   end
   echo "aws sts assume-role --role-session-name=$profile_name --role-arn=$role_arn --output=json --duration-seconds=43200 $mfa_stuff"
@@ -47,7 +56,7 @@ function aar
 
   if test "$sts_status" -ne 0
     echo "aar: Failed to obtain credentials ($sts_status); please try again"
-    return 2
+    return 3
   else
     echo $session_json > $json_file
     aar $profile_name

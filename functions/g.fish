@@ -2,7 +2,7 @@
 #   g foobar --> chdir to foobar relative to pwd, if exists
 #   g xyz    --> chdir to some project names x*_y*_z* or x*-z*-y*
 function g
-  set -l bases $HOME/Code/appfolio $HOME/Monolith $HOME/Code/xeger 
+  set -l bases $HOME/Code/appfolio $HOME/Code/xeger  $HOME/Code/appfolio/apm_bundle/apps
 
   set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_-]*[_-]/g' | sed -e 's/\[_-\]$//')
 
