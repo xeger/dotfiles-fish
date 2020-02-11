@@ -1,5 +1,5 @@
 # Run a project-local Ruby/Javascript executable in the PWD.
-function i
+function x
   if test -f Gemfile.lock
     bundle exec $argv
   else if test -f yarn.lock

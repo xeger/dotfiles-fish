@@ -40,10 +40,6 @@ end
 #  set -x RUBY_CFLAGS -I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib
 #end
 
-alias bx 'bundle exec'
-alias rr "rerun -b -c -p '**/*.{rb}' -- "
-alias rspec "bundle exec rspec --fail-fast"
-
 ######## docker
 
 alias dc   'docker-compose'
