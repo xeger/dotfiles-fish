@@ -70,6 +70,7 @@ end
 
 ######## git
 
+alias fetch='git fetch'
 alias gb='git branch'
 alias gco='git checkout'
 alias gcp='git cherry-pick'

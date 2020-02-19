@@ -3,7 +3,7 @@ function aar
   set -l profile_name $argv[1]
   set -l role_arn (grep -A3 "\[profile $profile_name\]" ~/.aws/config | grep role_arn | awk 'BEGIN { FS = " = " } ; { print $2 }')
   set -l mfa_serial (grep -A3 "\[profile $profile_name\]" ~/.aws/config | grep mfa_serial | awk 'BEGIN { FS = " = " } ; { print $2 }')
-  if test -z $role_arn
+  if test -z "$role_arn"
     echo "No profile '$profile_name' in ~/.aws/config"
     return 1
   end
@@ -11,6 +11,7 @@ function aar
   set -l json_file $HOME/.aws/cli/cache/aar-$profile_name.json
   if test -f "$json_file"
     set -gx AWS_SESSION_EXPIRATION (jq -r .Credentials.Expiration  $json_file)
+    set -x RBENV_VERSION system ; set -x RUBY_VERSION system
     if ruby -rtime -e 'exit Time.parse(ENV["AWS_SESSION_EXPIRATION"]) > Time.now'
       set -gx AWS_PROFILE $profile_name
       set -gx AWS_ACCESS_KEY (jq -r .Credentials.AccessKeyId  $json_file)
@@ -29,10 +30,9 @@ function aar
         set -gx (echo $name | tr a-z A-Z)  (echo $secrets_json | jq -r .$name)
       end
 
+      echo "aar: Resumed CLI session for $profile_name ($role_arn)"
       return 0
     end
-  else
-    set -l json_file
   end
 
   set -ge AWS_PROFILE
@@ -47,9 +47,9 @@ function aar
     if test -z "$mfa_code"
       return 2
     end
-    # read -p "echo 'MFA code: '" mfa_code
     set mfa_stuff --serial-number=$mfa_serial --token-code=$mfa_code
   end
+
   echo "aws sts assume-role --role-session-name=$profile_name --role-arn=$role_arn --output=json --duration-seconds=43200 $mfa_stuff"
   set -l session_json (aws sts assume-role --role-session-name=$profile_name --role-arn=$role_arn --output=json --duration-seconds=43200 $mfa_stuff)
   set -l sts_status $status

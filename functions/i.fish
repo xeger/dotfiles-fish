@@ -6,5 +6,8 @@ function i
     yarn install $argv
   else if test -f package-lock.json
     npm install $argv
+  else
+    echo "i: no lockfile found; don't know which language/packager paplies"
+    return 1  
   end
 end
