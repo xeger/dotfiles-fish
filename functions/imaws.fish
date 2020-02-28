@@ -1,5 +1,5 @@
 # AWS assume-role with fish sauce and an IM garnish.
-function aar
+function imaws
   set -l profile_name $argv[1]
   set -l role_arn (grep -A3 "\[profile $profile_name\]" ~/.aws/config | grep role_arn | awk 'BEGIN { FS = " = " } ; { print $2 }')
   set -l mfa_serial (grep -A3 "\[profile $profile_name\]" ~/.aws/config | grep mfa_serial | awk 'BEGIN { FS = " = " } ; { print $2 }')
@@ -7,7 +7,7 @@ function aar
     echo "No profile '$profile_name' in ~/.aws/config"
     return 1
   end
-  
+
   set -l json_file $HOME/.aws/cli/cache/aar-$profile_name.json
   if test -f "$json_file"
     set -gx AWS_SESSION_EXPIRATION (jq -r .Credentials.Expiration  $json_file)
