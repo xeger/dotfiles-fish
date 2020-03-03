@@ -30,7 +30,7 @@ function imaws
         set -gx (echo $name | tr a-z A-Z)  (echo $secrets_json | jq -r .$name)
       end
 
-      echo "aar: Resumed CLI session for $profile_name ($role_arn)"
+      echo "imaws: Resumed CLI session for $profile_name ($role_arn)"
       return 0
     end
   end
@@ -40,7 +40,7 @@ function imaws
   set -ge AWS_SECRET_ACCESS_KEY
   set -ge AWS_SESSION_TOKEN
 
-  echo "aar: Initializing CLI session for $profile_name ($role_arn)"
+  echo "imaws: Initializing CLI session for $profile_name ($role_arn)"
   set -l mfa_stuff ""
   if test -n "$mfa_serial"
     set -l mfa_code (ykman oath code --single AWS:appfolio-login)
@@ -55,11 +55,11 @@ function imaws
   set -l sts_status $status
 
   if test "$sts_status" -ne 0
-    echo "aar: Failed to obtain credentials ($sts_status); please try again"
+    echo "imaws: Failed to obtain credentials ($sts_status); please try again"
     return 3
   else
     echo $session_json > $json_file
-    aar $profile_name
+    imaws $profile_name
     return 0
   end
 end
