@@ -14,11 +14,11 @@ function imaws
     set -x RBENV_VERSION system ; set -x RUBY_VERSION system
     if ruby -rtime -e 'exit Time.parse(ENV["AWS_SESSION_EXPIRATION"]) > Time.now'
       set -gx AWS_PROFILE $profile_name
-      set -gx AWS_ACCESS_KEY (jq -r .Credentials.AccessKeyId  $json_file)
+      set -gx AWS_ACCESS_KEY_ID (jq -r .Credentials.AccessKeyId  $json_file)
       set -gx AWS_SECRET_ACCESS_KEY (jq -r .Credentials.SecretAccessKey  $json_file)
       set -gx AWS_SESSION_TOKEN (jq -r .Credentials.SessionToken  $json_file)
 
-      set -gx IM_AWS_ACCESS_KEY $AWS_ACCESS_KEY
+      set -gx IM_AWS_ACCESS_KEY $AWS_ACCESS_KEY_ID
       set -gx IM_AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY
       set -gx IM_AWS_SESSION_TOKEN $AWS_SESSION_TOKEN
 
@@ -36,7 +36,7 @@ function imaws
   end
 
   set -ge AWS_PROFILE
-  set -ge AWS_ACCESS_KEY
+  set -ge AWS_ACCESS_KEY_ID
   set -ge AWS_SECRET_ACCESS_KEY
   set -ge AWS_SESSION_TOKEN
 
