@@ -12,6 +12,14 @@ function prune
       git branch -r --merged=origin/master | grep -vE  'master|\*' | sed -e 's/^ *origin\//:/' | xargs git push origin
     end
   else
+    echo "Prune local branches that no longer exist in remotes:"
     git remote prune origin
+    for branchname in (git branch -l --format='%(refname:short)')
+      if ! string match -r '^\\*' $branchname
+        if git status $branchname | grep -q 'the upstream is gone'
+          git branch -D $branchname
+        end
+      end
+    end
   end
 end
