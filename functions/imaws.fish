@@ -50,7 +50,10 @@ function imaws
     set mfa_stuff --serial-number=$mfa_serial --token-code=$mfa_code
   end
 
-  echo "aws sts assume-role --role-session-name=$profile_name --role-arn=$role_arn --output=json --duration-seconds=43200 $mfa_stuff"
+  # be friendly to Ops and security auditors
+  set -l session_name "$EMAIL-$profile_name"
+
+  echo "aws sts assume-role --role-session-name=$session_name --role-arn=$role_arn --output=json --duration-seconds=43200 $mfa_stuff"
   set -l session_json (aws sts assume-role --role-session-name=$profile_name --role-arn=$role_arn --output=json --duration-seconds=43200 $mfa_stuff)
   set -l sts_status $status
 
