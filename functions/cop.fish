@@ -1,7 +1,7 @@
 # Run rubocop only on files that are edited vs. master
 function cop
   pushd (git rev-parse --show-toplevel)
-  if test -f backend/api/rubocop.yml
+  if test -f backend/api/.rubocop.yml
     echo "Use IM configuration"
     set config "--config=./.rubocop.yml"
   end

@@ -16,7 +16,7 @@ function prune
     git remote prune origin
     for branchname in (git branch -l --format='%(refname:short)')
       if ! string match -r '^\\*' $branchname
-        if git status $branchname | grep -q 'the upstream is gone'
+        if test -z (git branch -lr origin/$branchname)
           git branch -D $branchname
         end
       end
