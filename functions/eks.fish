@@ -1,13 +1,29 @@
 function eks
-  set cluster $argv[1]
+  argparse --name=eks 'n/namespace' 'r/region' -- $argv
+  or return
 
-  set namespace xeger
-  test -n "$argv[2]"; and set region $argv[2]
+  if test -z $argv[1]
+    echo "usage: eks <cluster>"
+    echo "  common clusters:"
+    echo "    - im-prod-demo-cluster-1"
+    echo "    - im-prod-cluster-1"
+    return 1
+  end
 
-  set region us-east-2
-  test -n "$argv[3]"; and set region $argv[3]
+  set cluster "$argv[1]"
 
-  echo "Configuring kubectl for cluster '$cluster' and namespace '$namespace'"
+  if test -n "$_flag_n"
+    set namespace $_flag_n
+  end
+
+  set -q region $_flag_r
+  or set region "us-east-2"
+
+  echo "+ aws eks --region $region update-kubeconfig --name $cluster"
   aws eks --region $region update-kubeconfig --name $cluster
-  kubectl config set-context (kubectl config current-context) --namespace=$namespace
+
+  if test -n "$namespace"
+    echo "+ kubectl config set-context (kubectl config current-context) --namespace=$namespace"
+    kubectl config set-context (kubectl config current-context) --namespace=$namespace
+  end
 end
