@@ -34,7 +34,8 @@ if test -d ~/.rbenv
   source (rbenv init -|psub)
 end
 
-set -x RUBYOPT "-W:no-deprecated"
+# only works with Ruby 2.7 (not OS X builtin Ruby, blech)
+#set -x RUBYOPT "-W:no-deprecated"
 
 # seems to be actively harmful under Mojave w/ ruby 2.3.x
 # does not harm Ruby 2.5

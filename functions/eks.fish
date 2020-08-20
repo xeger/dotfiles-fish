@@ -2,14 +2,6 @@ function eks
   argparse --name=eks 'n/namespace' 'r/region' -- $argv
   or return
 
-  if test -z $argv[1]
-    echo "usage: eks <cluster>"
-    echo "  common clusters:"
-    echo "    - im-prod-demo-cluster-1"
-    echo "    - im-prod-cluster-1"
-    return 1
-  end
-
   set cluster "$argv[1]"
 
   if test -n "$_flag_n"
@@ -18,6 +10,13 @@ function eks
 
   set -q region $_flag_r
   or set region "us-east-2"
+
+  if test -z $cluster
+    echo "usage: eks <cluster>"
+    echo "  available clusters:"
+    aws eks list-clusters --region=$region | jq -r '.clusters | map("    - " + .) | .[]'
+    return 1
+  end
 
   echo "+ aws eks --region $region update-kubeconfig --name $cluster"
   aws eks --region $region update-kubeconfig --name $cluster
