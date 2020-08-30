@@ -2,7 +2,18 @@
 #   g foobar --> chdir to foobar relative to pwd, if exists
 #   g xyz    --> chdir to some project names x*_y*_z* or x*-z*-y*
 function g
-  set -l bases $HOME/Code/appfolio/im/frontend $HOME/Code/appfolio/im/backend $HOME/Code/appfolio $HOME/Code/xeger
+  # Search well-known GitHub owners
+  set -l bases $HOME/Code/appfolio $HOME/Code/xeger $HOME/Code/onthespotqa
+
+  # If we're inside a Git (mono)repo, search top-level subdirs first
+  set -l toplevel (git rev-parse --show-toplevel 2> /dev/null)
+  if test -n "$toplevel"
+    for entry in $toplevel/*
+      if test -d $entry
+        set -p bases $entry
+      end
+    end
+  end
 
   set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_-]*[_-]/g' | sed -e 's/\[_-\]$//')
 
