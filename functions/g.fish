@@ -8,7 +8,9 @@ function g
   # If we're inside a Git (mono)repo, search top-level subdirs first
   set -l toplevel (git rev-parse --show-toplevel 2> /dev/null)
   if test -n "$toplevel"
-    for entry in $toplevel/*
+    set subdirs $toplevel/*
+    set subdirs $subdirs[-1..1]
+    for entry in $subdirs
       if test -d $entry
         set -p bases $entry
       end
@@ -19,15 +21,17 @@ function g
 
   # Check whether this is a shortcut for some source-code project.
   for base in $bases
-    set -l dirs (ls -d $base/*)
-    for dir in $dirs
-      set -l bn (basename $dir)
-      if test $bn = $argv[1] # exact match
-        cd $dir
-        return 0
-      else if echo $bn | grep -qE $initials # initials match
-        cd $dir
-        return 0
+    set -l dirents $base/*
+    for dir in $dirents
+      if test -d $dir
+        set -l bn (basename $dir)
+        if test $bn = $argv[1] # exact match
+          cd $dir
+          return 0
+        else if echo $bn | grep -qE $initials # initials match
+          cd $dir
+          return 0
+        end
       end
     end
   end
