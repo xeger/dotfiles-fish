@@ -61,6 +61,9 @@ alias ds   'docker service'
 alias dsi  'docker service inspect --pretty'
 alias dtty 'screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty 9600'
 
+######## Kubernetes
+alias kc   'kubectl'
+
 ######## google cloud SDK
 
 if [ -f '/Users/tony/google-cloud-sdk/path.fish.inc' ]

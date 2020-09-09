@@ -11,7 +11,7 @@ function g
     set subdirs $toplevel/*
     set subdirs $subdirs[-1..1]
     for entry in $subdirs
-      if test -d $entry
+      if test -d $entry && not git check-ignore -q $entry
         set -p bases $entry
       end
     end

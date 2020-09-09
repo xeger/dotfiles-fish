@@ -9,7 +9,7 @@ function imaws
   end
   set -l role_account_id (echo  $role_arn | cut -d: -f5)
 
-  set -l json_file $HOME/.aws/cli/cache/aar-$profile_name.json
+  set -l json_file $HOME/.aws/cli/cache/imaws-$profile_name.json
   if test -f "$json_file"
     set -gx AWS_SESSION_EXPIRATION (jq -r .Credentials.Expiration  $json_file)
     set -x RBENV_VERSION system ; set -x RUBY_VERSION system
@@ -26,11 +26,11 @@ function imaws
 
       # AWS creds are obtained; now let's grab all of the app secrets from
       # the AWS parameter store for our product.
-      set -l secrets_json (chamber export --format=json investment-management)
-      set -l secrets_names (echo $secrets_json | jq -r 'keys | .[]')
-      for name in $secrets_names
-        set -gx (echo $name | tr a-z A-Z)  (echo $secrets_json | jq -r .$name)
-      end
+      # set -l secrets_json (chamber export --format=json investment-management)
+      # set -l secrets_names (echo $secrets_json | jq -r 'keys | .[]')
+      # for name in $secrets_names
+      #   set -gx (echo $name | tr a-z A-Z)  (echo $secrets_json | jq -r .$name)
+      # end
 
       echo "imaws: Resumed CLI session for $profile_name ($role_arn)"
       return 0
