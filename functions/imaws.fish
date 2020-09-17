@@ -1,6 +1,19 @@
 # AWS assume-role with fish sauce and an IM garnish.
 function imaws
+  argparse --name=imbless 'h/help' 'c/cached' -- $argv 2> /dev/null
+  or set _flag_h 1
+
   set -l profile_name $argv[1]
+
+  if test -n "$_flag_h"; or test -z "$profile_name"
+    echo "Usage: imaws [--cached] <aws_cli_profile_name>"
+    echo "  Uses the AWS CLI to assume-role (w/ MFA if required) into an AWS profile"
+    echo "  as named in your from ~/.aws/config file."
+    echo "Flags:"
+    echo "  cached - do not obtain fresh credentials; exit silently if none cached"
+    return 1
+  end
+
   set -l role_arn (grep -A3 "\[profile $profile_name\]" ~/.aws/config | grep role_arn | awk 'BEGIN { FS = " = " } ; { print $2 }')
   set -l mfa_serial (grep -A3 "\[profile $profile_name\]" ~/.aws/config | grep mfa_serial | awk 'BEGIN { FS = " = " } ; { print $2 }')
   if test -z "$role_arn"
@@ -35,6 +48,10 @@ function imaws
       echo "imaws: Resumed CLI session for $profile_name ($role_arn)"
       return 0
     end
+  end
+
+  if test -n "$_flag_c"
+    return 0
   end
 
   set -ge AWS_ACCOUNT_ID
