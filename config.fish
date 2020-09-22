@@ -27,10 +27,17 @@ if test -d ~/go/bin
   launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
 end
 
-######## ruby
+######## concurrent version managers
 
-if test -d ~/.rbenv
-  set PATH ~/.rbenv/shims $PATH
+if which -s asdf
+  if which -s brew
+    set -x ASDF_DIR (brew --prefix asdf)
+  end
+  source /usr/local/share/fish/vendor_completions.d/asdf.fish
+  set -x PATH $PATH ~/.asdf/shims
+end
+
+if which -s rbenv; and test -d ~/.rbenv
   source (rbenv init -|psub)
 end
 
