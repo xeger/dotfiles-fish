@@ -1,5 +1,5 @@
-function imbless
-  argparse --name=imbless 'h/help' 'e/env' -- $argv 2> /dev/null
+function imchamber
+  argparse --name=imchamber 'h/help' 'e/env' -- $argv 2> /dev/null
   or set _flag_h 1
 
   if test -z "$argv[1]"; and test -f .chamber
@@ -9,7 +9,7 @@ function imbless
   end
 
   if test -n "$_flag_h"; or test -z "$service"
-    echo "Usage: imbless [--env] <service_name>"
+    echo "Usage: imchamber [--env] <service_name>"
     echo "  - or, write .chamber to PWD containing service_name"
     echo "Flags:"
     echo "  env - export secrets to shell environment, not to .env.local"
