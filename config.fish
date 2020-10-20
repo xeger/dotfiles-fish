@@ -66,7 +66,8 @@ alias dv   'docker volume'
 alias dst  'docker stack'
 alias ds   'docker service'
 alias dsi  'docker service inspect --pretty'
-alias dtty 'screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty 9600'
+alias dtty 'nc -U ~/Library/Containers/com.docker.docker/Data/debug-shell.sock'
+
 
 ######## Kubernetes
 alias kc   'kubectl'
@@ -141,6 +142,10 @@ function fish_prompt
 
   set_color normal
 end
+
+######## terraform
+
+alias tf='terraform'
 
 ######## local config that should not be committed to git
 
