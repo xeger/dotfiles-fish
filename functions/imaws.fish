@@ -24,9 +24,9 @@ function imaws
 
   set -l json_file $HOME/.aws/cli/cache/imaws-$profile_name.json
   if test -f "$json_file"
-    set -gx AWS_SESSION_EXPIRATION (jq -r .Credentials.Expiration  $json_file)
+    set -gx AWS_SESSION_EXPIRY (jq -r .Credentials.Expiration  $json_file)
     set -x RBENV_VERSION system ; set -x RUBY_VERSION system
-    if ruby -rtime -e 'exit Time.parse(ENV["AWS_SESSION_EXPIRATION"]) > Time.now'
+    if ruby -rtime -e 'exit Time.parse(ENV["AWS_SESSION_EXPIRY"]) > Time.now'
       set -gx AWS_ACCOUNT_ID $role_account_id
       set -gx AWS_PROFILE $profile_name
       set -gx AWS_ACCESS_KEY_ID (jq -r .Credentials.AccessKeyId  $json_file)
