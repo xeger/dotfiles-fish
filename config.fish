@@ -33,7 +33,9 @@ if which -s asdf
   if which -s brew
     set -x ASDF_DIR (brew --prefix asdf)
   end
-  source /usr/local/share/fish/vendor_completions.d/asdf.fish
+  if test -f /usr/local/share/fish/vendor_completions.d/asdf.fish
+    source /usr/local/share/fish/vendor_completions.d/asdf.fish
+  end
   set -x PATH $PATH ~/.asdf/shims
 end
 
