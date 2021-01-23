@@ -27,22 +27,6 @@ if test -d ~/go/bin
   launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
 end
 
-######## concurrent version managers
-
-if which -s asdf
-  if which -s brew
-    set -x ASDF_DIR (brew --prefix asdf)
-  end
-  if test -f /usr/local/share/fish/vendor_completions.d/asdf.fish
-    source /usr/local/share/fish/vendor_completions.d/asdf.fish
-  end
-  set -x PATH $PATH ~/.asdf/shims
-end
-
-if which -s rbenv; and test -d ~/.rbenv
-  source (rbenv init -|psub)
-end
-
 # only works with Ruby 2.7 (not OS X builtin Ruby, blech)
 #set -x RUBYOPT "-W:no-deprecated"
 
@@ -155,3 +139,7 @@ if [ -f ~/.config/fish/local.fish ]
   source ~/.config/fish/local.fish
 end
 
+######## install pwd hooks to lazy-initialize tool managers
+
+asdf__pwd
+rbenv__pwd

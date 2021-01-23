@@ -1,6 +1,6 @@
 # AWS assume-role with fish sauce and an IM garnish.
 function imaws
-  argparse --name=imbless 'h/help' 'c/cached' -- $argv 2> /dev/null
+  argparse --name=imaws 'h/help' 'c/cached' -- $argv 2> /dev/null
   or set _flag_h 1
 
   set -l profile_name $argv[1]
@@ -24,9 +24,8 @@ function imaws
 
   set -l json_file $HOME/.aws/cli/cache/imaws-$profile_name.json
   if test -f "$json_file"
-    set -gx AWS_SESSION_EXPIRY (jq -r .Credentials.Expiration  $json_file)
-    set -x RBENV_VERSION system ; set -x RUBY_VERSION system
-    if ruby -rtime -e 'exit Time.parse(ENV["AWS_SESSION_EXPIRY"]) > Time.now'
+    set -gx AWS_SESSION_EXPIRY (jq -r '.Credentials.Expiration | strptime("%Y-%m-%dT%H:%M:%S+00:00") | mktime' $json_file)
+    if test (math $AWS_SESSION_EXPIRY - (jq -n now)) -gt 3600
       set -gx AWS_ACCOUNT_ID $role_account_id
       set -gx AWS_PROFILE $profile_name
       set -gx AWS_ACCESS_KEY_ID (jq -r .Credentials.AccessKeyId  $json_file)
