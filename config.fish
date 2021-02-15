@@ -142,4 +142,3 @@ end
 ######## install pwd hooks to lazy-initialize tool managers
 
 asdf__pwd
-rbenv__pwd
