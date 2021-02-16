@@ -27,8 +27,15 @@ if test -d ~/go/bin
   launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
 end
 
+######## ruby
+
+if which -s rbenv; and test -d ~/.rbenv
+  source (rbenv init -|psub)
+end
+
 # only works with Ruby 2.7 (not OS X builtin Ruby, blech)
 #set -x RUBYOPT "-W:no-deprecated"
+set -x RUBYOPT "-W0"
 
 # seems to be actively harmful under Mojave w/ ruby 2.3.x
 # does not harm Ruby 2.5
@@ -109,7 +116,6 @@ set __fish_git_prompt_char_untrackedfiles '💩 '
 set __fish_git_prompt_char_stashstate '↩'
 set __fish_git_prompt_char_upstream_ahead '⋙'
 set __fish_git_prompt_char_upstream_behind '⋘'
-
 
 function fish_prompt
   set last_status $status
