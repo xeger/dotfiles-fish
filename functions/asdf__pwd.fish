@@ -11,7 +11,7 @@ function asdf__pwd --on-variable=PWD
     return
   end
 
-  while not test $dir = $top_dir
+  while not test $dir = $top_dir; and not test $dir = /
     if test -f "$dir/.tool-versions"
       asdf # delegate to function
     end

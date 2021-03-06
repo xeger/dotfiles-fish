@@ -29,10 +29,6 @@ end
 
 ######## ruby
 
-if which -s rbenv; and test -d ~/.rbenv
-  source (rbenv init -|psub)
-end
-
 # only works with Ruby 2.7 (not OS X builtin Ruby, blech)
 #set -x RUBYOPT "-W:no-deprecated"
 set -x RUBYOPT "-W0"
@@ -48,11 +44,10 @@ set -x RUBYOPT "-W0"
 alias dc   'docker-compose'
 alias dcb  'docker-compose build'
 alias dcr  'docker-compose run'
-alias dgc  'docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -v /etc:/etc spotify/docker-gc'
 alias di   'docker inspect'
 alias dim  'docker images'
 alias dn   'docker network'
-alias dps  'docker ps --format '\''table {{.ID | printf "%12.12s"}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}'\'''
+alias dps  'docker ps'
 alias drm  'docker rm -f'
 alias drmi 'docker rmi'
 alias dv   'docker volume'
@@ -145,6 +140,12 @@ if [ -f ~/.config/fish/local.fish ]
   source ~/.config/fish/local.fish
 end
 
-######## install pwd hooks to lazy-initialize tool managers
+######## tool version managers
 
-asdf__pwd
+if status --is-interactive
+  asdf__pwd
+
+  if which -s rbenv; and test -d ~/.rbenv
+    source (rbenv init -|psub)
+  end
+end
