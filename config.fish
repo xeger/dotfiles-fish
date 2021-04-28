@@ -41,9 +41,9 @@ set -x RUBYOPT "-W0"
 
 ######## docker
 
-alias dc   'docker-compose'
-alias dcb  'docker-compose build'
-alias dcr  'docker-compose run'
+alias dc   'docker compose'
+alias dcb  'docker compose build'
+alias dcr  'docker compose run'
 alias di   'docker inspect'
 alias dim  'docker images'
 alias dn   'docker network'
