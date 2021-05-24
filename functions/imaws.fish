@@ -75,17 +75,18 @@ function imaws
   echo "imaws: Initializing CLI session for $role_arn"
   set -l mfa_stuff ""
   if test -n "$mfa_serial"
+    set -l aws_email (echo $mfa_serial | cut -d/ -f2)
     set -l mfa_code (ykman oath code --single AWS:appfolio-login)
     if test -z "$mfa_code"
       return 2
     end
-    set mfa_stuff --serial-number=$mfa_serial --token-code=$mfa_code
+    set mfa_stuff --role-session-name=$aws_email --serial-number=$mfa_serial --token-code=$mfa_code
   end
 
   # TODO: look into this alternate version
   # aws sts get-session-token $mfa_stuff
-  echo "aws sts assume-role --role-arn=$role_arn --role-session-name=$EMAIL $mfa_stuff --output=json --duration-seconds=43200 "
-  set -l session_json (aws sts assume-role --role-arn=$role_arn --role-session-name=$EMAIL $mfa_stuff --output=json --duration-seconds=43200)
+  echo "aws sts assume-role --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=43200 "
+  set -l session_json (aws sts assume-role --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=43200)
   set -l sts_status $status
 
   if test "$sts_status" -ne 0
