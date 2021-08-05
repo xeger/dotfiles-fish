@@ -12,7 +12,7 @@ function asdf
     if test -f /usr/local/share/fish/vendor_completions.d/asdf.fish
       source /usr/local/share/fish/vendor_completions.d/asdf.fish
     end
-    set -x PATH $PATH ~/.asdf/shims
+    set -x PATH ~/.asdf/shims $PATH
   end
   if test -n "$argv"
     $real_asdf $argv
