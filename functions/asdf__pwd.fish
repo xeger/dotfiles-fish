@@ -7,12 +7,14 @@ function asdf__pwd --on-variable=PWD
   set -l dir (realpath $PWD)
 
   if test -f "$dir/.tool-versions"
+    echo "dotfiles: initialize asdf for $dir"
     asdf # delegate to function
     return
   end
 
   while not test $dir = $top_dir; and not test $dir = /
     if test -f "$dir/.tool-versions"
+      echo "dotfiles: initialize asdf for $dir"
       asdf # delegate to function
     end
     set dir (realpath $dir/..)

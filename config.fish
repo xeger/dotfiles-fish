@@ -1,6 +1,11 @@
 ######## basic Unix stuff: editor, terminal, etc
 
-setenv EDITOR vi
+set -x EDITOR vi
+
+# clean start (avoid Visual Studio Code bugs w/ path duplication)
+if test -f /etc/paths
+  set -x PATH (cat /etc/paths | tr '\n' ':' | sed -Ee '$ s/:+$//')
+end
 
 alias psx 'pstree -U -g 2 %self'
 alias lsx 'tree -A -C -L 2'

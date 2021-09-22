@@ -14,7 +14,5 @@ function asdf
     end
     set -x PATH ~/.asdf/shims $PATH
   end
-  if test -n "$argv"
-    $real_asdf $argv
-  end
+  $real_asdf $argv
 end
