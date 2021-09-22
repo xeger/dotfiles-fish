@@ -146,6 +146,7 @@ if status --is-interactive
   asdf__pwd
 
   if which -s rbenv; and test -d ~/.rbenv
+    echo "dotfiles: initialize rbenv"
     source (rbenv init -|psub)
   end
 end

@@ -32,8 +32,9 @@ function imaws
     end
   else
     set profile_name $argv[1]
-    set role_arn (grep -A3 "\[profile $profile_name\]" ~/.aws/config | grep role_arn | awk 'BEGIN { FS = " = " } ; { print $2 }')
-    set mfa_serial (grep -A3 "\[profile $profile_name\]" ~/.aws/config | grep mfa_serial | awk 'BEGIN { FS = " = " } ; { print $2 }')
+    set mfa_serial (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep mfa_serial | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+    set role_arn (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep role_arn | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+    set source_profile (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep source_profile | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
     if test -z "$role_arn"
       echo "No profile '$profile_name' in ~/.aws/config"
       return 1
@@ -73,20 +74,35 @@ function imaws
   set -ge AWS_SESSION_TOKEN
 
   echo "imaws: Initializing CLI session for $role_arn"
+
+  set source_profile (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep source_profile | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+  if test -n "$source_profile"
+    set profile_stuff --profile=$source_profile
+    set -x AWS_ACCESS_KEY_ID (grep -A3 "\[$source_profile\]" ~/.aws/credentials | grep aws_access_key_id | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+    set -x AWS_SECRET_ACCESS_KEY (grep -A3 "\[$source_profile\]" ~/.aws/credentials | grep aws_secret_access_key | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+  end
+
+  set duration_seconds (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep duration_seconds | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+  if test -z "$duration_seconds"
+    set duration_seconds 43200
+  end
+
   set -l mfa_stuff ""
-  if test -n "$mfa_serial"
+  if test -n "$mfa_serial"; and which -s ykman
     set -l aws_email (echo $mfa_serial | cut -d/ -f2)
     set -l mfa_code (ykman oath code --single AWS:appfolio-login)
     if test -z "$mfa_code"
       return 2
     end
     set mfa_stuff --role-session-name=$aws_email --serial-number=$mfa_serial --token-code=$mfa_code
+  else
+    set mfa_stuff --role-session-name=(whoami)@(hostname)
   end
 
   # TODO: look into this alternate version
   # aws sts get-session-token $mfa_stuff
-  echo "aws sts assume-role --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=43200 "
-  set -l session_json (aws sts assume-role --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=43200)
+  echo "aws sts assume-role $profile_stuff --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=$duration_seconds"
+  set -l session_json (aws sts assume-role --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=$duration_seconds)
   set -l sts_status $status
 
   if test "$sts_status" -ne 0
