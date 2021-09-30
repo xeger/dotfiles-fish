@@ -1,4 +1,5 @@
 function asdf
+  set -l initialized 0
   set -l real_asdf (which asdf)
   if test -z "$real_asdf"
     echo "dotfiles: asdf not installed or not in path"
@@ -13,6 +14,9 @@ function asdf
       source /usr/local/share/fish/vendor_completions.d/asdf.fish
     end
     set -x PATH ~/.asdf/shims $PATH
+    set initialized 1
   end
-  $real_asdf $argv
+  if test (count $argv) -gt 0 -o $initialized -eq 0
+    $real_asdf $argv
+  end
 end
