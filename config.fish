@@ -149,7 +149,16 @@ end
 ######## tool version managers
 
 if status --is-interactive
-  asdf__pwd
+  if test -d ~/.asdf
+    echo "dotfiles: initialize asdf"
+    if which -s brew
+      set -gx ASDF_DIR (brew --prefix asdf)
+    end
+    if test -f /usr/local/share/fish/vendor_completions.d/asdf.fish
+      source /usr/local/share/fish/vendor_completions.d/asdf.fish
+    end
+    set -x PATH ~/.asdf/shims $PATH
+  end
 
   if which -s rbenv; and test -d ~/.rbenv
     echo "dotfiles: initialize rbenv"

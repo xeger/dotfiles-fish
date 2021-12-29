@@ -7,6 +7,6 @@ function cop
     set -l prefix (git rev-parse --show-prefix)
     set paths (git diff --cached --name-status --relative=$prefix | grep '^[AM].*[.]rb$' | cut -f 2)
   end
-  echo "+ bundle exec rubocop -a $paths"
-  bundle exec rubocop -a $paths
+  echo "+ bundle exec rubocop -A $paths"
+  bundle exec rubocop -A $paths
 end

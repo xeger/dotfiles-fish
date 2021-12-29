@@ -54,10 +54,6 @@ function imaws
       set -gx AWS_SECRET_ACCESS_KEY (jq -r .Credentials.SecretAccessKey  $json_file)
       set -gx AWS_SESSION_TOKEN (jq -r .Credentials.SessionToken  $json_file)
 
-      set -gx IM_AWS_ACCESS_KEY $AWS_ACCESS_KEY_ID
-      set -gx IM_AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY
-      set -gx IM_AWS_SESSION_TOKEN $AWS_SESSION_TOKEN
-
       echo "imaws: Resumed CLI session for $role_arn"
       return 0
     end
