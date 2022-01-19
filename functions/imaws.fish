@@ -86,7 +86,8 @@ function imaws
   set -l mfa_stuff ""
   if test -n "$mfa_serial"; and which -s ykman
     set -l aws_email (echo $mfa_serial | cut -d/ -f2)
-    set -l mfa_code (ykman oath code --single AWS:appfolio-login)
+    echo "+ ykman oath accounts code --single AWS:appfolio-im-login"
+    set -l mfa_code (ykman oath accounts code --single AWS:appfolio-im-login)
     if test -z "$mfa_code"
       return 2
     end
