@@ -35,8 +35,8 @@ end
 ######## ruby
 
 # only works with Ruby 2.7 (not OS X builtin Ruby, blech)
-#set -x RUBYOPT "-W:no-deprecated"
-set -x RUBYOPT "-W0"
+set -x RUBYOPT "-W:no-deprecated"
+#set -x RUBYOPT "-W0"
 
 # seems to be actively harmful under Mojave w/ ruby 2.3.x
 # does not harm Ruby 2.5
