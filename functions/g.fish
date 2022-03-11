@@ -3,7 +3,7 @@
 #   g xyz    --> chdir to some project names x*_y*_z* or x*-z*-y*
 function g
   # Search well-known GitHub owners
-  set -l bases $HOME/Code/appfolio $HOME/Code/xeger $HOME/Code/onthespotqa
+  set -l bases $HOME/Code/AppFolio-IM $HOME/Code/xeger $HOME/Code/onthespotqa $HOME/Code/appfolio
 
   # If we're inside a Git (mono)repo, search top-level subdirs first
   set -l toplevel (git rev-parse --show-toplevel 2> /dev/null)
