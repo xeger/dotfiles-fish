@@ -44,6 +44,7 @@ function imaws
   set -l role_account_id (echo  $role_arn | cut -d: -f5)
   set -l cache_key (echo $role_arn | cut -d: -f5)-(echo $role_arn | cut -d/ -f2)
   set -l json_file $HOME/.aws/cli/cache/imaws-$cache_key.json
+  set -l login_account_alias "unknown"
 
   if test -f "$json_file"
     set -gx AWS_SESSION_EXPIRY (jq -r '.Credentials.Expiration | strptime("%Y-%m-%dT%H:%M:%S+00:00") | mktime' $json_file)
@@ -76,6 +77,7 @@ function imaws
     set profile_stuff --profile=$source_profile
     set -x AWS_ACCESS_KEY_ID (grep -A3 "\[$source_profile\]" ~/.aws/credentials | grep aws_access_key_id | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
     set -x AWS_SECRET_ACCESS_KEY (grep -A3 "\[$source_profile\]" ~/.aws/credentials | grep aws_secret_access_key | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+    set login_account_alias (aws iam list-account-aliases | jq -r '.AccountAliases[0]')
   end
 
   set duration_seconds (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep duration_seconds | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
@@ -86,8 +88,8 @@ function imaws
   set -l mfa_stuff ""
   if test -n "$mfa_serial"; and which -s ykman
     set -l aws_email (echo $mfa_serial | cut -d/ -f2)
-    echo "+ ykman oath accounts code --single AWS:appfolio-im-login"
-    set -l mfa_code (ykman oath accounts code --single AWS:appfolio-im-login)
+    echo "+ ykman oath accounts code --single AWS:$login_account_alias"
+    set -l mfa_code (ykman oath accounts code --single AWS:$login_account_alias)
     if test -z "$mfa_code"
       return 2
     end
