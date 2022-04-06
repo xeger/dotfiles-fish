@@ -3,14 +3,10 @@ function imchamber
   or set _flag_h 1
 
   set -l argcount (count $argv)
-  set -l legacy_format false
   set -l services ""
 
   if test $argcount -eq 0; and test -f .chamberrc
     set services (cat .chamberrc)
-  else if test $argcount -eq 0; and test -f .chamber
-    set legacy_format true
-    set services (cat .chamber)
   else if test $argcount -gt 0
     for service in $argv
       set -a services "env $service"
@@ -28,33 +24,22 @@ function imchamber
     return 1
   end
 
-  if test $legacy_format = true
-    echo "imchamber: using legacy .chamber file"
-    for service in $services
-      if test -n "$service"
-        echo "imchamber: exporting $service to your shell"
-        set -l secrets_json (chamber export --format=json $service)
+  set -l num (count $services)
+  echo "imchamber: automating $num commands"
+
+  for cmd in $services
+    if not string match -qr '^\s*#|^$' $cmd # ignore comments and empty lines
+      echo "+ $cmd"
+      if string match -qr '^env' $cmd
+        set -l cmd_suffix (string sub -s5 $cmd)
+        set -l secrets_json (chamber export --format=json $cmd_suffix)
         set -l secrets_names (echo $secrets_json | jq -r 'keys | .[]')
         for name in $secrets_names
           set -gx (echo $name | tr a-z A-Z)  (echo $secrets_json | jq -r .$name)
         end
-      end
-    end
-  else
-    for cmd in $services
-      if not string match -qr '^#|^$' $cmd # ignore comments and empty lines
-        echo "imchamber: $cmd"
-        if string match -qr '^env' $cmd
-          set -l cmd_suffix (string sub -s5 $cmd)
-          set -l secrets_json (chamber export --format=json $cmd_suffix)
-          set -l secrets_names (echo $secrets_json | jq -r 'keys | .[]')
-          for name in $secrets_names
-            set -gx (echo $name | tr a-z A-Z)  (echo $secrets_json | jq -r .$name)
-          end
-        else
-          set -l entire_cmd "chamber $cmd"
-          eval $entire_cmd
-        end
+      else
+        set -l entire_cmd "chamber $cmd"
+        eval $entire_cmd
       end
     end
   end

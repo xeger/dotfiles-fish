@@ -79,6 +79,10 @@ function imaws
     set -x AWS_SECRET_ACCESS_KEY (grep -A3 "\[$source_profile\]" ~/.aws/credentials | grep aws_secret_access_key | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
     set login_account_alias (aws iam list-account-aliases | jq -r '.AccountAliases[0]')
   end
+  if test -z "$AWS_ACCESS_KEY_ID" -o -z "$AWS_SECRET_ACCESS_KEY" -o -z "$login_account_alias"
+    echo "imaws: Failed to obtain credentials for source profile $source_profile; cannot perform STS operations"
+    return 1
+  end
 
   set duration_seconds (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep duration_seconds | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
   if test -z "$duration_seconds"
@@ -108,6 +112,7 @@ function imaws
     echo "imaws: Failed to obtain credentials ($sts_status); please try again"
     return 3
   else
+    mkdir -p (dirname $json_file)
     echo $session_json > $json_file
     imaws $argv[1]
     return 0
