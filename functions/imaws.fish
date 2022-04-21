@@ -104,7 +104,7 @@ function imaws
 
   # TODO: look into this alternate version
   # aws sts get-session-token $mfa_stuff
-  echo "aws sts assume-role $profile_stuff --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=$duration_seconds"
+  echo "+ aws sts assume-role $profile_stuff --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=$duration_seconds"
   set -l session_json (aws sts assume-role --role-arn=$role_arn $mfa_stuff --output=json --duration-seconds=$duration_seconds)
   set -l sts_status $status
 

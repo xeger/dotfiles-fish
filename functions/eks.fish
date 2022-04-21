@@ -13,7 +13,7 @@ function eks
 
   if test -z $cluster
     echo "usage: eks <cluster>"
-    echo "  available clusters:"
+    echo "  available clusters (aws eks list-clusters --region=$region):"
     aws eks list-clusters --region=$region | jq -r '.clusters | map("    - " + .) | .[]'
     return 1
   end
