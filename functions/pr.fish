@@ -5,6 +5,11 @@ function pr
   set -l source (git symbolic-ref HEAD 2>/dev/null | sed -e 's:refs/heads/::')
   set -l dest $argv[1]
 
+  if test "$dest = master"; and git show-ref -q --heads main
+    echo "Using main (not master) as default branch -- you insensitive prick!"
+    set -l dest main
+  end
+
   if test -n "$dest"
     open "https://github.com/$remote/pull/new/$dest...$source"
   else
