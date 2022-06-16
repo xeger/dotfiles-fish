@@ -10,8 +10,10 @@ function i
       case 'yarn*'
         yarn install
       case '*'
-        echo "Dunno how to install; please add packageManager to package.json"
+        echo "i: Dunno how to install; please add packageManager to package.json"
         return 1
     end
+  else
+    echo "i: Nothing seems to be installable in this folder"
   end
 end

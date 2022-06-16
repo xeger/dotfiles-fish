@@ -2,9 +2,17 @@
 function r
   if test -f Rakefile
     bundle exec rake $argv
-  else if test -f package-lock.json
-    npm run $argv
+  else if test -f package.json
+    set -l pmgr (cat package.json | jq -r .packageManager)
+    switch $pmgr
+      case 'yarn*'
+        yarn $argv
+      case '*'
+        npm run $argv
+    end
+  else if test -f Makefile
+    make $argv
   else
-    yarn $argv
+    echo "r: Nothing seems to be runnable in this folder"
   end
 end
