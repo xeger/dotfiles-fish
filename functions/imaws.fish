@@ -90,11 +90,19 @@ function imaws
   end
 
   set -l mfa_stuff ""
-  if test -n "$mfa_serial"; and which -s ykman
+  if test -n "$mfa_serial"
     set -l aws_email (echo $mfa_serial | cut -d/ -f2)
-    echo "+ ykman oath accounts code --single AWS:$login_account_alias"
-    set -l mfa_code (ykman oath accounts code --single AWS:$login_account_alias)
+    set -l mfa_code 'unknown'
+    if which -s op; and op item list | grep -q "AWS ($aws_email)"
+
+      echo "+ op item get \"AWS ($aws_email)\""
+      set mfa_code (op item get "AWS ($aws_email)" | grep 'one-time password:' | cut -b25-)
+    else if which -s ykman
+      echo "+ ykman oath accounts code --single AWS:$login_account_alias"
+      set mfa_code (ykman oath accounts code --single AWS:$login_account_alias)
+    end
     if test -z "$mfa_code"
+      echo "imaws: Failed to obtain MFA code; sorry"
       return 2
     end
     set mfa_stuff --role-session-name=$aws_email --serial-number=$mfa_serial --token-code=$mfa_code
