@@ -94,7 +94,8 @@ function imaws
     set -l aws_email (echo $mfa_serial | cut -d/ -f2)
     set -l mfa_code 'unknown'
     if which -s op; and op item list | grep -q "AWS ($aws_email)"
-
+      echo "+ op signin"
+      op signin
       echo "+ op item get \"AWS ($aws_email)\""
       set mfa_code (op item get "AWS ($aws_email)" | grep 'one-time password:' | cut -b25-)
     else if which -s ykman

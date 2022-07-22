@@ -6,7 +6,7 @@ function pr
   set -l dest $argv[1]
 
   if test -n "$dest"
-    if test "$dest = master"; and git show-ref -q --heads main
+    if [ $dest = master ]; and git show-ref -q --heads main
       echo "Using main (not $dest) as default branch -- you insensitive prick!"
       set -l dest main
     end
