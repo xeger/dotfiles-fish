@@ -1,6 +1,6 @@
 # Setup port forwarding to an RDS cluster via kubectl.
 function imqadb
-  set -l eks_cluster standalone-qa-1
+  set -l eks_cluster standalone-qa-2
   set -l rds_cluster im-qa-rds-primary-cluster-1.cluster-clnwi6wvmtsz.us-east-2.rds.amazonaws.com
   set -l eks_proxy rds-primary-cluster-1-proxy
   imaws qa
