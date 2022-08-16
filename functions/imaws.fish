@@ -5,19 +5,35 @@ function imaws
 
   set -l profile_name $argv[1]
 
-  if test -n "$_flag_h"; or test -z "$argv[1]"
+  if test -n "$_flag_h"
     echo "Usage: imaws [--cached] [--ttl=<ttl>] <arn|profile>"
     echo "  Uses the AWS CLI to assume-role (w/ MFA if required) into an AWS profile"
     echo "  as named in your from ~/.aws/config file, or as specified by an IAM role ARN."
     echo "Flags:"
     echo "  -c / --cached - do not obtain fresh credentials; exit silently if none cached"
     echo "  -t / --ttl    - min acceptable TTL for cached credentials (default 3600 sec)"
+    echo ""
+    echo "To unset all environment variables and restore AWS CLI to its default behavior,"
+    echo "run imaws without an ARN or profile name."
 
     return 1
   end
 
-  if test -n "$flag_t"
-    set min_ttl $flag_t
+  set -ge AWS_ACCOUNT_ID
+  set -ge AWS_PROFILE
+  set -ge AWS_ACCESS_KEY_ID
+  set -ge AWS_SECRET_ACCESS_KEY
+  set -ge AWS_SESSION_EXPIRY
+  set -ge AWS_SESSION_TOKEN
+
+  if test -z "$argv[1]"
+    echo "imaws: No profile name given; unsetting all environment variables"
+    echo "(For usage information, run imaws --help)"
+    return 0
+  end
+
+  if test -n "$_flag_t"
+    set min_ttl $_flag_t
   else
     set min_ttl 3600
   end
@@ -36,7 +52,7 @@ function imaws
     set role_arn (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep role_arn | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
     set source_profile (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep source_profile | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
     if test -z "$role_arn"
-      echo "No profile '$profile_name' in ~/.aws/config"
+      echo "imaws: No profile '$profile_name' in ~/.aws/config"
       return 1
     end
   end
@@ -63,12 +79,6 @@ function imaws
   if test -n "$_flag_c"
     return 0
   end
-
-  set -ge AWS_ACCOUNT_ID
-  set -ge AWS_PROFILE
-  set -ge AWS_ACCESS_KEY_ID
-  set -ge AWS_SECRET_ACCESS_KEY
-  set -ge AWS_SESSION_TOKEN
 
   echo "imaws: Initializing CLI session for $role_arn"
 
