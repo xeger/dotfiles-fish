@@ -157,3 +157,8 @@ if test -d ~/.asdf
     end
   end
 end
+
+######## VS Code
+
+string match -q "$TERM_PROGRAM" "vscode"
+and . (code --locate-shell-integration-path fish)
