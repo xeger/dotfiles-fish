@@ -110,7 +110,7 @@ function imaws
       echo "+ ykman oath accounts code --single AWS:$login_account_alias"
       set mfa_code (ykman oath accounts code --single AWS:$login_account_alias)
     end
-    if test -z "$mfa_code"
+    if [ "$mfa_code" = "unknown" ]
       echo "imaws: Failed to obtain MFA code; sorry"
       return 2
     end
