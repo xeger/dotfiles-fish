@@ -1,6 +1,6 @@
 # Run a script/task of a Ruby or Javascript project located in PWD.
 function r
-  if test -f Makefile
+  if test -f Makefile; and grep -q "$argv[1]:" Makefile
     make $argv
   else if test -f Rakefile
     bundle exec rake $argv
