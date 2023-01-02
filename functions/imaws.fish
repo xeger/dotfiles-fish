@@ -72,6 +72,11 @@ function imaws
       set -gx AWS_SESSION_TOKEN (jq -r .Credentials.SessionToken  $json_file)
 
       echo "imaws: Resumed CLI session for $role_arn"
+
+      if test -f .chamberrc
+        imchamber
+      end
+
       return 0
     end
   end
