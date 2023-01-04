@@ -1,0 +1,34 @@
+#! /usr/bin/env fish
+
+set -l min_ttl 60
+set -l profile_name $AWS_PROFILE
+
+set mfa_serial (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep mfa_serial | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+set role_arn (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep role_arn | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+set source_profile (grep -A5 "\[profile $profile_name\]" ~/.aws/config | grep source_profile | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+
+if test -z "$role_arn"
+  echo "imaws-wrapper: No profile '$profile_name' in ~/.aws/config"
+  exit 1
+end
+
+set -l role_account_id (echo  $role_arn | cut -d: -f5)
+set -l cache_key (echo $role_arn | cut -d: -f5)-(echo $role_arn | cut -d/ -f2)
+set -l json_file $HOME/.aws/cli/cache/imaws-$cache_key.json
+
+if test -f "$json_file"
+  set -gx AWS_SESSION_EXPIRY (jq -r '.Credentials.Expiration | strptime("%Y-%m-%dT%H:%M:%S+00:00") | mktime' $json_file)
+  if test (math $AWS_SESSION_EXPIRY - (jq -n 'now|floor')) -gt $min_ttl
+    set -gx AWS_ACCOUNT_ID $role_account_id
+    set -gx AWS_PROFILE $profile_name
+    set -gx AWS_ACCESS_KEY_ID (jq -r .Credentials.AccessKeyId  $json_file)
+    set -gx AWS_SECRET_ACCESS_KEY (jq -r .Credentials.SecretAccessKey  $json_file)
+    set -gx AWS_SESSION_TOKEN (jq -r .Credentials.SessionToken  $json_file)
+
+    aws $argv
+    exit 0
+  end
+end
+
+echo "imaws-wrapper: Credentials expired; please run imaws to refresh them"
+exit 1
