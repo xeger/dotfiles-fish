@@ -146,10 +146,9 @@ if [ -f ~/.config/fish/local.fish ]
   source ~/.config/fish/local.fish
 end
 
-######## tool version managers
+######## tool version managers (even for non-interactive shells!)
 
 if test -d ~/.asdf
-  echo "dotfiles: initialize asdf"
   set -x PATH ~/.asdf/shims $PATH
   if status --is-interactive
     if test -f /usr/local/share/fish/vendor_completions.d/asdf.fish
