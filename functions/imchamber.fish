@@ -1,11 +1,13 @@
 function imchamber
-  argparse --name=imchamber 'h/help' -- $argv 2> /dev/null
+  argparse --name=imchamber 'f/force' 'h/help' -- $argv 2> /dev/null
   or set _flag_h 1
 
   set -l argcount (count $argv)
+  set -l fingerprint ""
   set -l services ""
 
   if test $argcount -eq 0; and test -f .chamberrc
+    set fingerprint "$AWS_ACCOUNT_ID"(md5 -q .chamberrc)
     set services (cat .chamberrc)
   else if test $argcount -gt 0
     for service in $argv
@@ -14,14 +16,23 @@ function imchamber
   end
 
   if test -n "$_flag_h"; or test -z "$services"
-    echo "Usage: imchamber [--file] <service> [service2 ...]"
-    echo "  - or, write .chamber to PWD containing service names, one per line"
+    echo "Usage: imchamber <service> [service2 ...]"
+    echo "  - or, write .chamberrc to PWD containing `chamber` commands, one per line"
     echo ""
     echo "Exports secrets from the designated chamber service(s) to your shell environment."
     echo ""
+    echo "Example .chamberrc file:"
+    echo "  env service1"
+    echo "  env service2"
+    echo ""
     echo "Flags:"
-    echo "  file - overwrite .env.local with secrets"
+    echo "  force - re-run chamberrc even if already run"
     return 1
+  end
+
+  if test -n "$fingerprint"; and test "$fingerprint == $__imchamber_last_fingerprint"; and test -z "$_flag_f"
+    echo "imchamber: skipping (already ran successfully); use --force to override"
+    return 0
   end
 
   set -l num (count $services)
@@ -42,5 +53,9 @@ function imchamber
         eval $entire_cmd
       end
     end
+  end
+
+  if test -n "$fingerprint"
+    set -g __imchamber_last_fingerprint $fingerprint
   end
 end
