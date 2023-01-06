@@ -71,6 +71,11 @@ function imaws
       set -gx AWS_SECRET_ACCESS_KEY (jq -r .Credentials.SecretAccessKey  $json_file)
       set -gx AWS_SESSION_TOKEN (jq -r .Credentials.SessionToken  $json_file)
 
+      # Deal with shitty old E2E suites that need CircleCI-style env vars (yech!)
+      set -gx IM_AWS_ACCESS_KEY $AWS_ACCESS_KEY_ID
+      set -gx IM_AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY
+      set -gx IM_AWS_SESSION_TOKEN $AWS_SESSION_TOKEN
+
       echo "imaws: Resumed CLI session for $role_arn"
 
       if test -f .chamberrc
