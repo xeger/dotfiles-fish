@@ -30,7 +30,7 @@ function imchamber
     return 1
   end
 
-  if test -n "$fingerprint"; and test "$fingerprint == $__imchamber_last_fingerprint"; and test -z "$_flag_f"
+  if test -n "$fingerprint"; and test "$fingerprint" = "$__imchamber_last_fingerprint"; and test -z "$_flag_f"
     echo "imchamber: skipping (already ran successfully); use --force to override"
     return 0
   end
