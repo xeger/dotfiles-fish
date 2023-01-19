@@ -7,8 +7,13 @@ function imchamber
   set -l services ""
 
   if test $argcount -eq 0; and test -f .chamberrc
-    set fingerprint "$AWS_ACCOUNT_ID"(md5 -q .chamberrc)
-    set services (cat .chamberrc)
+    if test -n "$AWS_ACCOUNT_ID"
+      set fingerprint "$AWS_ACCOUNT_ID"(md5 -q .chamberrc)
+      set services (cat .chamberrc)
+    else
+      echo "imchamber: skipping (no AWS credentials available); use --force to override"
+      return 0
+    end
   else if test $argcount -gt 0
     for service in $argv
       set -a services "env $service"
