@@ -49,6 +49,10 @@ function imchamber
       if string match -qr '^env' $cmd
         set -l cmd_suffix (string sub -s5 $cmd)
         set -l secrets_json (chamber export --format=json $cmd_suffix)
+        if test $status -ne 0
+          echo "imchamber: error exporting secrets from $cmd_suffix"
+          return 1
+        end
         set -l secrets_names (echo $secrets_json | jq -r 'keys | .[]')
         for name in $secrets_names
           set -gx (echo $name | tr a-z A-Z)  (echo $secrets_json | jq -r .$name)
