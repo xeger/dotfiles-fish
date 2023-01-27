@@ -65,6 +65,7 @@ function imaws
   if test -f "$json_file"
     set -gx AWS_SESSION_EXPIRY (jq -r '.Credentials.Expiration | strptime("%Y-%m-%dT%H:%M:%S+00:00") | mktime' $json_file)
     if test (math $AWS_SESSION_EXPIRY - (jq -n 'now|floor')) -gt $min_ttl
+      # NB: Sets creds globally (and weirdly, not locally) for future shell commands
       set -gx AWS_ACCOUNT_ID $role_account_id
       set -gx AWS_PROFILE $profile_name
       set -gx AWS_ACCESS_KEY_ID (jq -r .Credentials.AccessKeyId  $json_file)
@@ -79,6 +80,13 @@ function imaws
       echo "imaws: Resumed CLI session for $role_arn"
 
       if test -f .chamberrc
+        # Set creds locally so instaneous imchamber invocation can use them.
+        # The `-gx` above can't be seen within the subroutine, weirdly enough. Maybe a fish bug?
+        set -lx AWS_ACCOUNT_ID $role_account_id
+        set -lx AWS_PROFILE $profile_name
+        set -lx AWS_ACCESS_KEY_ID (jq -r .Credentials.AccessKeyId  $json_file)
+        set -lx AWS_SECRET_ACCESS_KEY (jq -r .Credentials.SecretAccessKey  $json_file)
+        set -lx AWS_SESSION_TOKEN (jq -r .Credentials.SessionToken  $json_file)
         imchamber
       end
 
