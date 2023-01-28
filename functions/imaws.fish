@@ -104,6 +104,7 @@ function imaws
   if test -n "$source_profile"
     set profile_stuff --profile=$source_profile
     set -x AWS_ACCESS_KEY_ID (grep -A3 "\[$source_profile\]" ~/.aws/credentials | grep aws_access_key_id | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
+    set -x AWS_PROFILE $source_profile
     set -x AWS_SECRET_ACCESS_KEY (grep -A3 "\[$source_profile\]" ~/.aws/credentials | grep aws_secret_access_key | awk 'BEGIN { FS = " ?= ?" } ; { print $2 }')
     set login_account_alias (aws iam list-account-aliases | jq -r '.AccountAliases[0]')
   end
