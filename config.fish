@@ -32,6 +32,12 @@ if test -d ~/go/bin
   launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
 end
 
+######## python
+
+if test -d $HOME/Library/Python/3.9/bin # on Mac OS X
+  set -x PATH $PATH $HOME/Library/Python/3.9/bin
+end
+
 ######## ruby
 
 # only works with Ruby 2.7 (not OS X builtin Ruby, blech)
