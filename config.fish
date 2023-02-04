@@ -32,11 +32,13 @@ if test -d ~/go/bin
   launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
 end
 
-######## python
+######## python (on Mac OS X, i.e. `/usr/bin/pip3 install xyz`)
 
-if test -d $HOME/Library/Python/3.9/bin # on Mac OS X
-  set -x PATH $PATH $HOME/Library/Python/3.9/bin
+set -l pybin $HOME/Library/Python/3.*/bin
+if test -n $pybin # on Mac OS X
+  set -x PATH $PATH $pybin
 end
+set -e pybin
 
 ######## ruby
 
