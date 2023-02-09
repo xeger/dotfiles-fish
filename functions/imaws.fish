@@ -1,6 +1,6 @@
 # AWS assume-role with fish sauce and an IM garnish.
 function imaws
-  argparse --name=imaws 'h/help' 'c/cached' 't/ttl' -- $argv 2> /dev/null
+  argparse --name=imaws 'h/help' 'c/cached' 't/ttl' 'u/unset' -- $argv 2> /dev/null
   or set _flag_h 1
 
   set -l profile_name $argv[1]
@@ -25,9 +25,12 @@ function imaws
   set -ge AWS_SECRET_ACCESS_KEY
   set -ge AWS_SESSION_EXPIRY
   set -ge AWS_SESSION_TOKEN
+  set -ge IM_AWS_ACCESS_KEY
+  set -ge IM_AWS_SESSION_TOKEN
+  set -ge IM_AWS_SECRET_ACCESS_KEY
 
-  if test -z "$argv[1]"
-    echo "imaws: No profile name given; unsetting all environment variables"
+  if test -z "$argv[1]"; or test -n "$_flag_u"
+    echo "imaws: unsetting all environment variables"
     echo "(For usage information, run imaws --help)"
     return 0
   end
