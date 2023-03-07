@@ -9,8 +9,8 @@ function imchamber
   if test $argcount -eq 0; and test -f .chamberrc
     set -l gci_arn (aws sts get-caller-identity --output=text --query=Arn 2> /dev/null)
     if string match -q '*:assumed-role/*' $gci_arn
-      set -l gci_account_id (echo $gci_arn | cut -d: -f50)
-      set fingerprint "$gci_account_id"(md5 -q .chamberrc)
+      set -l gci_account_id (echo $gci_arn | cut -d: -f5)
+      set fingerprint "$gci_account_id"-(md5 -q .chamberrc)
       set services (cat .chamberrc)
     else
       echo "imchamber: skipping (no AWS credentials available); use --force to override"
