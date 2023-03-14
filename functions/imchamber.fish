@@ -6,15 +6,24 @@ function imchamber
   set -l fingerprint ""
   set -l services ""
 
-  if test $argcount -eq 0; and test -f .chamberrc
+  if test $argcount -eq 0
+    set -l gci_account_id  ''
     set -l gci_arn (aws sts get-caller-identity --output=text --query=Arn 2> /dev/null)
     if string match -q '*:assumed-role/*' $gci_arn
-      set -l gci_account_id (echo $gci_arn | cut -d: -f5)
-      set fingerprint "$gci_account_id"-(md5 -q .chamberrc)
-      set services (cat .chamberrc)
+      set gci_account_id (echo $gci_arn | cut -d: -f5)
     else
       echo "imchamber: skipping (no AWS credentials available); use --force to override"
       return 0
+    end
+
+    set -l rcfile .chamberrc
+    if test -f .chamberrc.$gci_account_id
+      set rcfile ".chamberrc.$gci_account_id"
+    end
+
+    if test -f $rcfile
+      set fingerprint "$gci_account_id"-(md5 -q $rcfile)
+      set services (cat $rcfile)
     end
   else if test $argcount -gt 0
     for service in $argv
@@ -22,6 +31,7 @@ function imchamber
     end
   end
 
+  echo "5"
   if test -n "$_flag_h"; or test -z "$services"
     echo "Usage: imchamber <service> [service2 ...]"
     echo "  - or, write .chamberrc to PWD containing `chamber` commands, one per line"
