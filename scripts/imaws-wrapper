@@ -1,5 +1,8 @@
 #! /usr/bin/env fish
 
+# Wrapper that invokes the AWS CLI with cached credentials provided by imaws.
+# Helps Lens, et al function better with imaws & role assumption.
+
 set -l min_ttl 60
 set -l profile_name $AWS_PROFILE
 
