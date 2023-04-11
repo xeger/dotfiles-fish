@@ -8,7 +8,7 @@ function pr
   if test -n "$dest"
     if [ $dest = master ]; and git show-ref -q --heads main
       echo "Using main (not $dest) as default branch -- you insensitive prick!"
-      set -l dest main
+      set dest main
     end
     open "https://github.com/$remote/pull/new/$dest...$source"
   else
