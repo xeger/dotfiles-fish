@@ -4,6 +4,7 @@ function imaws
   or set _flag_h 1
 
   set -l profile_name $argv[1]
+  set -l role_name $argv[2]
 
   if test -n "$_flag_h"
     echo "Usage: imaws [--cached] [--ttl=<ttl>] <arn|profile>"
@@ -57,6 +58,10 @@ function imaws
     if test -z "$role_arn"
       echo "imaws: No profile '$profile_name' in ~/.aws/config"
       return 1
+    end
+    if test -n "$role_name"
+      set role_arn (echo $role_arn | sed "s/:role\/.*/:role\/$role_name/")
+      echo "Specifically assuming the $role_name role ($role_arn)"
     end
   end
 
@@ -153,7 +158,7 @@ function imaws
   else
     mkdir -p (dirname $json_file)
     echo $session_json > $json_file
-    imaws $argv[1]
+    imaws $role_arn
     return 0
   end
 end
