@@ -61,7 +61,7 @@ function imaws
     end
     if test -n "$role_name"
       set role_arn (echo $role_arn | sed "s/:role\/.*/:role\/$role_name/")
-      echo "Specifically assuming the $role_name role ($role_arn)"
+      echo "imaws: Specifically assuming the $role_name role ($role_arn)"
     end
   end
 
@@ -158,7 +158,7 @@ function imaws
   else
     mkdir -p (dirname $json_file)
     echo $session_json > $json_file
-    imaws $role_arn
+    imaws $argv # recurse to pick up the cached creds
     return 0
   end
 end
