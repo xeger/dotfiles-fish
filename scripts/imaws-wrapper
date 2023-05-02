@@ -2,6 +2,14 @@
 
 # Wrapper that invokes the AWS CLI with cached credentials provided by imaws.
 # Helps Lens, et al function better with imaws & role assumption.
+# TODO: deal with assuming special roles (other than the profile default)
+#   - how? where does AWS_PROFILE even come from when this script gets invoked?
+
+if test -n "$AWS_ACCESS_KEY_ID"; and test -n "$AWS_SECRET_ACCESS_KEY"
+  # Nothing to do; we already (appear to) have valid creds
+  aws $argv
+  exit 0
+end
 
 set -l min_ttl 60
 set -l profile_name $AWS_PROFILE
