@@ -1,8 +1,10 @@
 # Install Ruby/Javascript project dependencies in PWD.
 function i
-  if test -f Gemfile.lock
-    bundle install $argv
-  else if test -f package.json
+  if test -f Gemfile
+    bundle check || bundle install
+  end
+
+  if test -f package.json
     set -l pmgr (cat package.json | jq -r .packageManager)
     switch $pmgr
       case 'npm*'
@@ -10,10 +12,15 @@ function i
       case 'yarn*'
         yarn install
       case '*'
-        echo "i: Dunno how to install; please add packageManager to package.json"
-        return 1
+        if test -f package-lock.json
+          npm install
+        else if test -f yarn.lock
+          yarn install
+        else
+          echo "i: Dunno how to install; please add packageManager to package.json"
+          return 1
+        end
     end
-  else
-    echo "i: Nothing seems to be installable in this folder"
   end
 end
+
