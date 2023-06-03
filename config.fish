@@ -24,6 +24,10 @@ if test -n "$SSH_AUTH_SOCK"
   end
 end
 
+if test -d ~/java/apache-maven-3.9.2/bin
+  set -x PATH $PATH $HOME/java/apache-maven-3.9.2/bin
+end
+
 ######## google go
 
 if test -d ~/go/bin
@@ -35,7 +39,7 @@ end
 ######## python (on Mac OS X, i.e. `/usr/bin/pip3 install xyz`)
 
 set -l pybin $HOME/Library/Python/3.*/bin
-if test -n $pybin # on Mac OS X
+if test -n "$pybin"
   set -x PATH $PATH $pybin
 end
 set -e pybin
