@@ -90,6 +90,11 @@ end
 
 ######## git
 
+if [ ! -f '$HOME/.gitignore' ]
+  touch $HOME/.gitignore
+  echo ".DS_Store" >> $HOME/.gitignore
+end
+
 alias fetch='git fetch'
 alias gb='git branch'
 alias gco='git checkout'
