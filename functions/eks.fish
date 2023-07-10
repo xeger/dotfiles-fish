@@ -22,6 +22,7 @@ function eks
   aws eks --region $region update-kubeconfig --name $cluster
   sed "s!command: aws!command: $HOME/.config/fish/scripts/imaws-wrapper!g" ~/.kube/config > ~/.kube/config.tmp
   mv ~/.kube/config.tmp ~/.kube/config
+  chmod go-rwx ~/.kube/config
   echo "Updated ~/.kube/config to use imaws-wrapper"
 
   if test -n "$namespace"
