@@ -56,6 +56,14 @@ set -x RUBYOPT "-W:no-deprecated"
 #  set -x RUBY_CFLAGS -I/usr/local/opt/openssl/include -L/usr/local/opt/openssl/lib
 #end
 
+######## rust
+
+# shrink rust installs with `asdf install rust` (and similar commands)
+set -x RUST_WITHOUT "rust-docs"
+if test -d ~/.cargo/bin
+  set -x PATH $PATH ~/.cargo/bin
+end
+
 ######## docker
 
 alias darch 'docker inspect -f "{{.Architecture}}"'
