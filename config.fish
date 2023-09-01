@@ -46,9 +46,15 @@ set -e pybin
 
 ######## ruby
 
-# only works with Ruby 2.7 (not OS X builtin Ruby, blech)
+# only works with Ruby 2.7+ (not OS X builtin Ruby, blech)
 set -x RUBYOPT "-W:no-deprecated"
+# use with older Ruby (if you must!)
 #set -x RUBYOPT "-W0"
+
+# disable ri and rdoc during gem install
+if ! test -f ~/.gemrc
+  echo 'gem: --no-document' >> ~/.gemrc
+end
 
 # seems to be actively harmful under Mojave w/ ruby 2.3.x
 # does not harm Ruby 2.5
