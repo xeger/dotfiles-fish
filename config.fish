@@ -182,7 +182,11 @@ end
 if test -d ~/.asdf
   set -x PATH ~/.asdf/shims $PATH
   if status --is-interactive
-    if test -f /usr/local/share/fish/vendor_completions.d/asdf.fish
+    if test -d /opt/homebrew/opt/asdf
+      source /opt/homebrew/opt/asdf/libexec/asdf.fish
+      source /opt/homebrew/share/fish/vendor_completions.d/asdf.fish
+    else if test -d /usr/local/opt/asdf
+      source /usr/local/opt/asdf/libexec/asdf.fish
       source /usr/local/share/fish/vendor_completions.d/asdf.fish
     end
   end
