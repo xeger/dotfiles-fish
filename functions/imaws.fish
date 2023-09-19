@@ -27,6 +27,7 @@ function imaws
   set -ge AWS_SESSION_EXPIRY
   set -ge AWS_SESSION_TOKEN
   set -ge IM_AWS_ACCESS_KEY
+  set -ge IM_AWS_ACCESS_KEY_ID
   set -ge IM_AWS_SESSION_TOKEN
   set -ge IM_AWS_SECRET_ACCESS_KEY
 
@@ -82,6 +83,7 @@ function imaws
 
       # Deal with shitty old E2E suites that need CircleCI-style env vars (yech!)
       set -gx IM_AWS_ACCESS_KEY $AWS_ACCESS_KEY_ID
+      set -gx IM_AWS_ACCESS_KEY_ID $AWS_ACCESS_KEY_ID
       set -gx IM_AWS_SECRET_ACCESS_KEY $AWS_SECRET_ACCESS_KEY
       set -gx IM_AWS_SESSION_TOKEN $AWS_SESSION_TOKEN
 

@@ -31,6 +31,7 @@ end
 ######## google go
 
 if test -d ~/go/bin
+  set -x GOEXPERIMENT loopvar
   set -x GOPATH ~/go
   set -x PATH $PATH ~/go/bin
   launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
@@ -91,6 +92,8 @@ alias dtty  'nc -U ~/Library/Containers/com.docker.docker/Data/debug-shell.sock'
 
 ######## Kubernetes
 alias kc   'kubectl'
+alias kcgp 'kubectl get pods --show-labels'
+alias kcl 'kubectl logs'
 
 ######## google cloud SDK
 
