@@ -9,6 +9,6 @@ function ci
   if test -d $root/.circleci
     open "https://circleci.com/gh/$org/workflows/$repo/tree/$branch"
   else
-    open "https://github.com/$org/$repo/tree/$branch"
+    open "https://github.com/$org/$repo/actions?query=branch%3A$branch"
   end
 end
