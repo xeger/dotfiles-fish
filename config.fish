@@ -123,6 +123,7 @@ alias glp='git log --topo-order --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Cr
 alias gss='git status'
 alias gsw='git show'
 alias sclear='git stash clear'
+alias sdrop='git stash drop'
 alias slist='git stash list'
 alias spush='git stash save'
 alias spop='git stash pop'
