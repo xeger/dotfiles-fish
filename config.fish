@@ -31,7 +31,6 @@ end
 ######## google go
 
 if test -d ~/go/bin
-  set -x GOEXPERIMENT loopvar
   set -x GOPATH ~/go
   set -x PATH $PATH ~/go/bin
   launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
