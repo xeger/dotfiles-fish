@@ -121,6 +121,7 @@ alias gl='git log --topo-order --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Cre
 alias glp='git log --topo-order --pretty=format:"%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%G?:%an>%Creset" --abbrev-commit'
 alias gss='git status'
 alias gsw='git show'
+alias sapply='git stash apply'
 alias sclear='git stash clear'
 alias sdrop='git stash drop'
 alias slist='git stash list'
