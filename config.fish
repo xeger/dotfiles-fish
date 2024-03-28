@@ -90,6 +90,7 @@ alias dtty  'nc -U ~/Library/Containers/com.docker.docker/Data/debug-shell.sock'
 
 
 ######## Kubernetes
+
 alias kc   'kubectl'
 alias kcgp 'kubectl get pods --show-labels'
 alias kcl 'kubectl logs'
@@ -102,6 +103,12 @@ if [ -f '/Users/tony/google-cloud-sdk/path.fish.inc' ]
   else
     . '/Users/tony/google-cloud-sdk/path.fish.inc'
   end
+end
+
+######## tailscale
+
+if [ -f /Applications/Tailscale.app/Contents/MacOS/Tailscale ]
+  alias tailscale /Applications/Tailscale.app/Contents/MacOS/Tailscale
 end
 
 ######## git
