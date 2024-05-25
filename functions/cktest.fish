@@ -17,16 +17,16 @@ function cktest
     case 'port-forward'
       switch $argv[2]
         case 'agent'
-          echo "Port forward to agent UX services"
-          kubectl port-forward -n darkwing service/darkwing 18080:8080 &
-          kubectl port-forward -n legacy service/atlasclient 10001:10001 &
-          # kubectl port-forward -n agent-ux service/router 8080:8080 &
+          echo "Forward local ports to agent services"
+          tmux new-session    -s agent   -d -n agent kubectl port-forward -n darkwing service/darkwing 18080:8080
+          or return 20
+          tmux new-window     -t agent:1             kubectl port-forward -n legacy service/atlasclient 10001:10001
+          tmux new-window     -t agent:2             kubectl port-forward -n agent-ux service/router 8080:8080
+          tmux attach-session -t agent
         case '*'
           echo "Usage: cktest port-forward <agent>"
-          return 2
+          return 1
       end
-      echo "Your port forwards are running in the background."
-      echo "Manage them with the fish `jobs` command."
     case '*'
       echo "Usage: cktest <env|port-forward>"
       return 1
