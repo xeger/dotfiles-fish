@@ -1,8 +1,8 @@
 function atlantis
   # graphql query for the last comment on a PR
   set query_top_comment '
-    query($pr: Int!) {
-      repository(name:"terraform", owner: "crossnokaye") {
+    query($owner: String!, $name: String!, $pr: Int!) {
+      repository(name: $name, owner: $owner) {
         pullRequest(number: $pr) {
           comments(last: 1) {
             edges {
@@ -31,12 +31,10 @@ function atlantis
   echo -n "Waiting for Atlantis to respond"
   set comment_file (mktemp)
   set done 0
-  # set since (date -u +"%Y-%m-%dT%H:%M:%SZ")
   while test $done -eq 0
-    #gh api "/repos/{owner}/{repo}/issues/$pr_number/comments?since=$since&per_page=2&page=1" | jq '.[1]' > $comment_file
-    gh api graphql -F pr=753 -f query=$query_top_comment -q '.data.repository.pullRequest.comments.edges[0].node' > $comment_file
+    gh api graphql -F owner='{owner}' -F name='{repo}' -F pr=753 -f query=$query_top_comment -q '.data.repository.pullRequest.comments.edges[0].node' > $comment_file
     set comment_author (jq -r '.author.login' < $comment_file)
-    if test $comment_author = "crossnokaye-atlantis"
+    if string match -q "*atlantis*" -- $comment_author
       set done 1
     else
       echo -n "."
