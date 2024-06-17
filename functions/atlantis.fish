@@ -38,7 +38,7 @@ function atlantis
       set done 1
     else
       echo -n "."
-      sleep 1
+      sleep 5
     end
   end
   echo
