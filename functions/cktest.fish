@@ -14,6 +14,9 @@ function cktest
       echo "  test+view @ ck - login all envs"
       set -x TEST_VIEW_USERNAME (op read op://Shared/nqpltj5fax4mygkvf7fvsz7r7e/username)
       set -x TEST_VIEW_PASSWORD (op read op://Shared/nqpltj5fax4mygkvf7fvsz7r7e/password)
+    case 'dump-secret'
+      echo "Dump Kubernetes secret $argv[3] of namespace $argv[2] to stdout"
+      kubectl -n $argv[2] get secret $argv[3] -o jsonpath='{.data}' | jq '.|map_values(@base64d)'
     case 'port-forward'
       switch $argv[2]
         case 'agent'
