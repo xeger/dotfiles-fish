@@ -7,6 +7,8 @@ function x
     switch $pmgr
       case 'npm*'
         npx $argv
+      case 'pnpm*'
+        pnpm exec $argv
       case 'yarn*'
         yarn exec $argv
       case '*'
@@ -15,7 +17,11 @@ function x
         else if test -f yarn.lock
           yarn $argv
         else
-          echo "i: Dunno how to run; please add packageManager to package.json"
+          if test -n "$pmgr"
+            echo "x: Dunno how to exec for $pmgr; please add support"
+          else
+            echo "x: Dunno how to exec; please add packageManager to package.json"
+          end
           return 1
         end
     end

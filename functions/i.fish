@@ -21,7 +21,7 @@ function i
         else
           if test -n "$pmgr"
             echo "i: Dunno how to install for $pmgr; please add support"
-        else
+          else
             echo "i: Dunno how to install; please add packageManager to package.json"
           end
           return 1
