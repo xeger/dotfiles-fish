@@ -32,6 +32,9 @@ function atlantis
   set comment_file (mktemp)
   set done 0
   while test $done -eq 0
+    echo "----"
+    echo "gh api graphql -F owner='{owner}' -F name='{repo}' -F pr=753 -f query=$query_top_comment"
+    echo "----"
     gh api graphql -F owner='{owner}' -F name='{repo}' -F pr=753 -f query=$query_top_comment -q '.data.repository.pullRequest.comments.edges[0].node' > $comment_file
     set comment_author (jq -r '.author.login' < $comment_file)
     if string match -q "*atlantis*" -- $comment_author
@@ -46,6 +49,9 @@ function atlantis
   echo
   jq -r '.body' < $comment_file
   jq -r '.body' < $comment_file | grep -Eq '(Apply|Plan) Error'
+  echo "---------------------------------"
+  cat $comment_file
+  echo "---------------------------------"
   if test $status -eq 0
     return 1
   end

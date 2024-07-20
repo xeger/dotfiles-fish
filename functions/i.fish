@@ -9,6 +9,8 @@ function i
     switch $pmgr
       case 'npm*'
         npm install
+      case 'pnpm*'
+        pnpm install
       case 'yarn*'
         yarn install
       case '*'
@@ -17,7 +19,11 @@ function i
         else if test -f yarn.lock
           yarn install
         else
-          echo "i: Dunno how to install; please add packageManager to package.json"
+          if test -n "$pmgr"
+            echo "i: Dunno how to install for $pmgr; please add support"
+        else
+            echo "i: Dunno how to install; please add packageManager to package.json"
+          end
           return 1
         end
     end
