@@ -26,16 +26,22 @@ function atlantis
     return 1
   end
 
-  gh api --silent "/repos/{owner}/{repo}/issues/$pr_number/comments" -f body="atlantis $argv"
+  if test (count $argv) -gt 0
+    echo "Dispatching to Atlantis:"
+    echo "  $argv"
+    gh api --silent "/repos/{owner}/{repo}/issues/$pr_number/comments" -f body="atlantis $argv"
+    echo -n "Waiting for Atlantis to respond"
+  else
+    echo -n "Retrieving last Atlantis output"
+  end
 
-  echo -n "Waiting for Atlantis to respond"
   set comment_file (mktemp)
   set done 0
   while test $done -eq 0
-    echo "----"
-    echo "gh api graphql -F owner='{owner}' -F name='{repo}' -F pr=753 -f query=$query_top_comment"
-    echo "----"
-    gh api graphql -F owner='{owner}' -F name='{repo}' -F pr=753 -f query=$query_top_comment -q '.data.repository.pullRequest.comments.edges[0].node' > $comment_file
+    # echo "----"
+    # echo "gh api graphql -F owner='{owner}' -F name='{repo}' -F pr=$pr_number -f query=$query_top_comment"
+    # echo "----"
+    gh api graphql -F owner='{owner}' -F name='{repo}' -F pr=$pr_number -f query=$query_top_comment -q '.data.repository.pullRequest.comments.edges[0].node' > $comment_file
     set comment_author (jq -r '.author.login' < $comment_file)
     if string match -q "*atlantis*" -- $comment_author
       set done 1
@@ -49,9 +55,9 @@ function atlantis
   echo
   jq -r '.body' < $comment_file
   jq -r '.body' < $comment_file | grep -Eq '(Apply|Plan) Error'
-  echo "---------------------------------"
-  cat $comment_file
-  echo "---------------------------------"
+  # echo "---------------------------------"
+  # cat $comment_file
+  # echo "---------------------------------"
   if test $status -eq 0
     return 1
   end
