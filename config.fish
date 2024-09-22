@@ -1,6 +1,7 @@
 ######## basic Unix stuff: editor, terminal, etc
 
-set -x EDITOR vi
+set -gx EDITOR vi
+set -gx XDG_CONFIG_HOME ~/.config
 
 # clean start (avoid Visual Studio Code bugs w/ path duplication)
 if test -f /etc/paths
@@ -208,3 +209,9 @@ end
 
 string match -q "$TERM_PROGRAM" "vscode"
 and . (code --locate-shell-integration-path fish)
+
+######## direnv
+
+if status --is-interactive; and which -s direnv
+  direnv hook fish | source
+end

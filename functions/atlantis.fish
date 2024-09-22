@@ -27,12 +27,11 @@ function atlantis
   end
 
   if test (count $argv) -gt 0
-    echo "Dispatching to Atlantis:"
-    echo "  $argv"
+    echo "+ atlantis $argv"
     gh api --silent "/repos/{owner}/{repo}/issues/$pr_number/comments" -f body="atlantis $argv"
     echo -n "Waiting for Atlantis to respond"
   else
-    echo -n "Retrieving last Atlantis output"
+    echo -n "Retrieving last Atlantis comment (or looping forever, your choice)"
   end
 
   set comment_file (mktemp)

@@ -7,6 +7,8 @@ function r
   else if test -f package.json
     set -l pmgr (cat package.json | jq -r .packageManager)
     switch $pmgr
+      case 'pnpm*'
+        pnpm $argv
       case 'yarn*'
         yarn $argv
       case '*'
