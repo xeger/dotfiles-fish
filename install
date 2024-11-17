@@ -1,0 +1,8 @@
+#! /usr/bin/env fish
+
+set basedir (realpath (dirname (status --current-filename)))
+
+if ! test -s ~/.gitconfig
+  echo "Installing ~/.gitconfig symlink"
+  ln -s $basedir/.gitconfig ~/.gitconfig
+end
