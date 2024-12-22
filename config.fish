@@ -14,7 +14,7 @@ alias lsx 'tree -A -C -L 2'
 ######## ssh
 
 if test -n "$SSH_AUTH_SOCK"
-  set -l private_keys (grep -El 'BEGIN [A-Z]* ?PRIVATE KEY' ~/.ssh/*)
+  set -l private_keys (grep -r --include=\* -El 'BEGIN [A-Z]* ?PRIVATE KEY' ~/.ssh/*)
   if test $status = 0; and test -n "$private_keys"
     ssh-add $private_keys 2> /dev/null
     if test $status != 0
@@ -47,10 +47,8 @@ set -e pybin
 
 ######## ruby
 
-# only works with Ruby 2.7+ (not OS X builtin Ruby, blech)
+# only works with Ruby 2.7+ (not OS X builtin Ruby, which is slated for removal)
 set -x RUBYOPT "-W:no-deprecated"
-# use with older Ruby (if you must!)
-#set -x RUBYOPT "-W0"
 
 # disable ri and rdoc during gem install
 if ! test -f ~/.gemrc
