@@ -31,6 +31,10 @@ end
 
 ######## google go
 
+if test -d /usr/local/go/bin
+  set -x PATH $PATH /usr/local/go/bin
+end
+
 if test -d ~/go/bin
   set -x GOPATH ~/go
   set -x PATH $PATH ~/go/bin
