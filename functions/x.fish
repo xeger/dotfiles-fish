@@ -3,7 +3,12 @@ function x
   if test -f Gemfile; or test (count *.gemspec) -gt 0
     bundle exec $argv
   else if test -f package.json
-    set -l pmgr (cat package.json | jq -r .packageManager)
+    set -l ws_root '.'
+    set -l git_root (git rev-parse --show-toplevel 2> /dev/null)
+    if test -n "$git_root"
+      set ws_root $git_root
+    end
+    set -l pmgr (cat $ws_root/package.json | jq -r .packageManager)
     switch $pmgr
       case 'npm*'
         npx $argv
