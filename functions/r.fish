@@ -13,7 +13,7 @@ function r
     set -l pmgr (cat $ws_root/package.json | jq -r .packageManager)
     switch $pmgr
       case 'pnpm*'
-        pnpm $argv
+        pnpm run $argv
       case 'yarn*'
         yarn $argv
       case '*'
