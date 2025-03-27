@@ -5,12 +5,11 @@ function r
   else if test -f Rakefile
     bundle exec rake $argv
   else if test -f package.json
-    set -l ws_root '.'
     set -l git_root (git rev-parse --show-toplevel 2> /dev/null)
-    if test -n "$git_root"
-      set ws_root $git_root
+    set -l pmgr (cat package.json | jq -r .packageManager)
+    if test -z "$pmgr"; and test -f $git_root/package.json
+      set pmgr (cat $git_root/package.json | jq -r .packageManager)
     end
-    set -l pmgr (cat $ws_root/package.json | jq -r .packageManager)
     switch $pmgr
       case 'pnpm*'
         pnpm run $argv
