@@ -41,6 +41,9 @@ if test -d ~/go/bin
   launchctl setenv PATH (string join ':' $PATH) GOPATH $GOPATH
 end
 
+alias cogen 'find . -type d -name gen | xargs git checkout HEAD'
+alias comocks 'find . -type d -name mocks | xargs git checkout HEAD'
+
 ######## python (on Mac OS X, i.e. `/usr/bin/pip3 install xyz`)
 
 set -l pybin $HOME/Library/Python/3.*/bin
