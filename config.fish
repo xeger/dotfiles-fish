@@ -119,9 +119,9 @@ end
 
 ######## git
 
-if [ ! -f '$HOME/.gitignore' ]
-  touch $HOME/.gitignore
-  echo ".DS_Store" >> $HOME/.gitignore
+if [ ! -f "$HOME/.gitignore_global" ]
+  touch $HOME/.gitignore_global
+  echo ".DS_Store" >> $HOME/.gitignore_global
 end
 
 alias fetch='git fetch'
