@@ -29,6 +29,12 @@ if test -d ~/java/apache-maven-3.9.2/bin
   set -x PATH $PATH $HOME/java/apache-maven-3.9.2/bin
 end
 
+######## xdg binaries
+
+if test -d ~/.local/bin
+  set -x PATH $PATH ~/.local/bin
+end
+
 ######## google go
 
 if test -d /usr/local/go/bin
