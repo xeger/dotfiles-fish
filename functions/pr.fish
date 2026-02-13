@@ -1,17 +1,27 @@
-# Open a browser to GitHub in order to compare this branch and/or open a
-# pull request to another branch.
+# Trigger Claude to open a pull request, optionally as draft, targeting
+# either an explicit branch argument or the repo's default branch.
 function pr
-  set -l remote (git remote -v | grep push | head -1 | sed 's|^.*github.com[:/]\(.*\)\.git.*$|\1|')
-  set -l source (git symbolic-ref HEAD 2>/dev/null | sed -e 's:refs/heads/::')
+  argparse 'd/draft' -- $argv; or return
+
   set -l dest $argv[1]
 
-  if test -n "$dest"
-    if [ $dest = master ]; and git show-ref -q --heads main
-      echo "Using main (not $dest) as default branch -- you insensitive prick!"
-      set dest main
-    end
-    open "https://github.com/$remote/pull/new/$dest...$source"
-  else
-    open "https://github.com/$remote/compare/$source"
+  if test -z "$dest"
+    set dest (git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's|^origin/||')
   end
+
+  if test -z "$dest"
+    set dest (git remote show origin 2>/dev/null | sed -n '/HEAD branch/s/.*: //p' | head -1)
+  end
+
+  if test -z "$dest"
+    set dest main
+  end
+
+  set -l draft_word ""
+  if set -q _flag_draft
+    set draft_word "draft "
+  end
+
+  set -l prompt "Open a "$draft_word"pull request to the "$dest" branch."
+  claude --model=opus "$prompt"
 end
