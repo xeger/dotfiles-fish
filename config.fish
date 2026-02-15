@@ -3,16 +3,9 @@
 set -gx EDITOR vi
 set -gx XDG_CONFIG_HOME ~/.config
 
-# clean start (avoid Visual Studio Code bugs w/ path duplication)
-if test -f /etc/paths
-  set -x PATH (cat /etc/paths | tr '\n' ':' | sed -Ee '$ s/:+$//')
-end
-
 ######## xdg binaries
 
-if test -d ~/.local/bin
-  set -x PATH $PATH ~/.local/bin
-end
+fish_add_path --path ~/.local/bin
 
 ######## general-purpose aliases
 
