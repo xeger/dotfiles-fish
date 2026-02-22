@@ -1,6 +1,6 @@
 if test -d ~/.asdf
   set -x ASDF_NODEJS_LEGACY_FILE_DYNAMIC_STRATEGY latest_installed
-  fish_add_path --path --prepend ~/.asdf/shims
+  fish_add_path --path --prepend --move ~/.asdf/shims
   if status --is-interactive
     if test -d /opt/homebrew/opt/asdf
       source /opt/homebrew/opt/asdf/libexec/asdf.fish
