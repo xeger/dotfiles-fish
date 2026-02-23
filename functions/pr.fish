@@ -37,5 +37,5 @@ function pr
   end
 
   set -l prompt "Open a "$draft_word"pull request to the "$dest" branch."
-  claude -p --model=opus "$prompt"
+  claude --model=opus "$prompt"
 end
