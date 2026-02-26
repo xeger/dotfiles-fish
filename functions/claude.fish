@@ -1,4 +1,3 @@
 function claude
-  # --dangerously-skip-permissions
-  command claude $argv
+  command claude --dangerously-skip-permissions $argv
 end
