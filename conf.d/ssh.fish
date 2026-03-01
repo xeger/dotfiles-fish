@@ -1,5 +1,5 @@
 if test -n "$SSH_AUTH_SOCK"
-  set -l private_keys (grep -r --include=\* -El 'BEGIN [A-Z]* ?PRIVATE KEY' ~/.ssh/*)
+  set -l private_keys (grep -r --include=\* -El 'BEGIN [A-Z]* ?PRIVATE KEY' ~/.ssh/id_*)
   if test $status = 0; and test -n "$private_keys"
     ssh-add $private_keys 2> /dev/null
     if test $status != 0
