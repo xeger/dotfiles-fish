@@ -17,6 +17,7 @@ alias lsx 'tree -A -C -L 2'
 function fish_prompt
   set last_status $status
 
+  printf '%s:' (string sub -l 3 (hostname))
   set_color $fish_color_cwd
   printf '%s' (prompt_pwd)
   set_color normal
