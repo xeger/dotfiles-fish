@@ -17,7 +17,11 @@ alias lsx 'tree -A -C -L 2'
 function fish_prompt
   set last_status $status
 
-  printf '%s:' (string sub -l 3 (hostname))
+  if set -q SSH_CONNECTION
+    set_color --bold white
+    printf '%s:' (string sub -l 3 (hostname))
+    set_color normal
+  end
   set_color $fish_color_cwd
   printf '%s' (prompt_pwd)
   set_color normal
