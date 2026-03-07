@@ -4,6 +4,11 @@
 function g
   # Search well-known GitHub owners
   set -l bases $HOME/Code/crossnokaye $HOME/Code/xeger
+  for dir in $HOME/Code/*/
+    if not contains $dir $bases
+      set -a bases $dir
+    end
+  end
 
   # If we're inside a Git (mono)repo, search top-level subdirs first
   set -l toplevel (git rev-parse --show-toplevel 2> /dev/null)
@@ -15,6 +20,12 @@ function g
         set -p bases $entry
       end
     end
+  end
+
+  # Exact match in ~/Work short-circuits Code search
+  if test -d $HOME/Work/$argv[1]
+    cd $HOME/Work/$argv[1]
+    return 0
   end
 
   set -l initials (echo "^$argv[1]" | sed -e 's/[A-Za-z]/&[^_-]*[_-]/g' | sed -e 's/\[_-\]$//')
