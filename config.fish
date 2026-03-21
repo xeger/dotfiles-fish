@@ -11,6 +11,7 @@ fish_add_path --path ~/.local/bin
 
 alias psx 'pstree -U -g 2 %self'
 alias lsx 'tree -A -C -L 2'
+alias ccr 'claude --continue'
 alias cmh 'claude --model=haiku'
 alias cms 'claude --model=sonnet'
 
