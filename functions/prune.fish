@@ -14,6 +14,7 @@ function prune
   else
     git remote prune origin
     echo "Pruning local repository"
+    git worktree prune
     for branchname in (git branch -l --format='%(refname:short)')
       if ! string match -r '^\\*' $branchname
         if test -z (git branch -lr origin/$branchname)
