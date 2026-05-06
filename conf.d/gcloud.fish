@@ -1,7 +1,7 @@
-if [ -f '/Users/tony/google-cloud-sdk/path.fish.inc' ]
+if [ -f '/Users/tony/.local/google-cloud-sdk/path.fish.inc' ]
   if type source > /dev/null
-    source '/Users/tony/google-cloud-sdk/path.fish.inc'
+    source '/Users/tony/.local/google-cloud-sdk/path.fish.inc'
   else
-    . '/Users/tony/google-cloud-sdk/path.fish.inc'
+    . '/Users/tony/.local/google-cloud-sdk/path.fish.inc'
   end
 end
