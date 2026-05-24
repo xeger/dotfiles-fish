@@ -5,18 +5,6 @@
 function pr
   argparse 'd/draft' 'f/freshen' -- $argv; or return
 
-  # Check for an existing PR silently
-  set -l existing_pr (gh pr view --json url --jq '.url' 2>/dev/null)
-
-  if test -n "$existing_pr"
-    if set -q _flag_freshen
-      claude --model=opus "Review the current pull request and update its title and description to better reflect the changes, focusing on clarity, completeness, and accuracy."
-    else
-      gh pr view --web
-    end
-    return
-  end
-
   set -l dest $argv[1]
 
   if test -z "$dest"
@@ -29,6 +17,19 @@ function pr
 
   if test -z "$dest"
     set dest main
+  end
+
+  # Check for an existing PR targeting the requested branch silently
+  set -l head (git symbolic-ref --short HEAD 2>/dev/null)
+  set -l existing_pr (gh pr list --head "$head" --base "$dest" --state open --json url --jq '.[0].url' 2>/dev/null)
+
+  if test -n "$existing_pr"
+    if set -q _flag_freshen
+      claude --model=opus "Review the current pull request and update its title and description to better reflect the changes, focusing on clarity, completeness, and accuracy."
+    else
+      gh pr view "$existing_pr" --web
+    end
+    return
   end
 
   set -l draft_word ""
