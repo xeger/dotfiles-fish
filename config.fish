@@ -14,6 +14,8 @@ alias lsx 'tree -A -C -L 2'
 alias ccr 'claude --continue'
 alias cmh 'claude --model=haiku'
 alias cms 'claude --model=sonnet'
+alias oc 'opencode'
+alias occ 'opencode --continue'
 
 ######## prompt
 
