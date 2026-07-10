@@ -25,7 +25,7 @@ function pr
 
   if test -n "$existing_pr"
     if set -q _flag_freshen
-      claude --model=opus "Review the current pull request and update its title and description to better reflect the changes, focusing on clarity, completeness, and accuracy."
+      claude --model=sonnet "Review the current pull request and update its title and description to better reflect the changes, focusing on clarity, completeness, and accuracy."
     else
       gh pr view "$existing_pr" --web
     end
