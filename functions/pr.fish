@@ -2,8 +2,9 @@
 # either an explicit branch argument or the repo's default branch.
 # If a PR already exists, opens it in the browser instead.
 # Use --freshen/-f to ask Claude to critique and update an existing PR's description.
+# Use --web/-w to skip the LLM and open the GitHub compare page in a browser.
 function pr
-  argparse 'd/draft' 'f/freshen' -- $argv; or return
+  argparse 'd/draft' 'f/freshen' 'w/web' -- $argv; or return
 
   set -l dest $argv[1]
 
@@ -25,10 +26,19 @@ function pr
 
   if test -n "$existing_pr"
     if set -q _flag_freshen
-      claude --model=sonnet "Review the current pull request and update its title and description to better reflect the changes, focusing on clarity, completeness, and accuracy."
+      claude --model=sonnet --print "Review the current pull request and update its title and description to better reflect the changes, focusing on clarity, completeness, and accuracy."
     else
       gh pr view "$existing_pr" --web
     end
+    return
+  end
+
+  if set -q _flag_web
+    set -l gh_args --web --base "$dest"
+    if set -q _flag_draft
+      set -a gh_args --draft
+    end
+    gh pr create $gh_args
     return
   end
 
@@ -38,5 +48,5 @@ function pr
   end
 
   set -l prompt "Open a "$draft_word"pull request to the "$dest" branch."
-  claude --model=opus "$prompt"
+  claude --model=opus --print "$prompt"
 end
